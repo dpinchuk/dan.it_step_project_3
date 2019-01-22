@@ -3,9 +3,13 @@ package dao;
 import models.BookingModel;
 import models.FlightModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookingDAOImpl implements BookingDAO {
+
+    private List<String> bookingModelList = new ArrayList<>();
+
     @Override
     public BookingModel createBooking(FlightModel flight, String name, String surname) {
         return null;
@@ -35,4 +39,13 @@ public class BookingDAOImpl implements BookingDAO {
     public List<BookingModel> getUserBookings(String name, String surname) {
         return null;
     }
+
+    public List<String> getBookingModelList() {
+        return bookingModelList;
+    }
+
+    public void setBookingModelList(List<String> bookingModelList) {
+        this.bookingModelList = bookingModelList;
+    }
+
 }
