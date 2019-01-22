@@ -42,16 +42,24 @@ public class ViewConsole {
     private void select(String select) {
         switch (select) {
             case "1":
+                // вызываем контроллер, а в нем дао
                 break;
             case "2":
+                // вызываем контроллер, а в нем дао
                 break;
             case "3":
+                // вызываем контроллер, а в нем дао
                 break;
             case "4":
+                // вызываем контроллер, а в нем дао
                 break;
             case "5":
+                // вызываем контроллер, а в нем дао
                 break;
             case "6":
+                // вызываем контроллер, а в нем дао
+                break;
+            default:
                 break;
         }
     }
