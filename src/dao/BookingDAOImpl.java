@@ -26,18 +26,22 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     @Override
-    public List<BookingModel> getAllBookings() {
+    public List<String> getAllBookings() {
         return null;
     }
 
     @Override
-    public List<BookingModel> getBookings(int bookingId) {
+    public List<String> getBookings(int bookingId) {
         return null;
     }
 
     @Override
-    public List<BookingModel> getUserBookings(String name, String surname) {
+    public List<String> getUserBookings(String name, String surname) {
         return null;
+    }
+
+    @Override
+    public void addFileDataToDAO(List<String> list) {
     }
 
     public List<String> getBookingModelList() {

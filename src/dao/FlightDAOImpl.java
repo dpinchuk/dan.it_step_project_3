@@ -9,6 +9,16 @@ public class FlightDAOImpl implements FlightDAO {
 
     private List<String> flightModelList = new ArrayList<>();
 
+
+
+    public List<String> getFlightModelList() {
+        return flightModelList;
+    }
+
+    public void setFlightModelList(List<String> flightModelList) {
+        this.flightModelList = flightModelList;
+    }
+
     @Override
     public String getFlightInfo(int id) {
         return null;
@@ -19,11 +29,8 @@ public class FlightDAOImpl implements FlightDAO {
         return null;
     }
 
-    public List<String> getFlightModelList() {
-        return flightModelList;
+    @Override
+    public void addFileDataToDAO(List<String> list) {
     }
 
-    public void setFlightModelList(List<String> flightModelList) {
-        this.flightModelList = flightModelList;
-    }
 }
