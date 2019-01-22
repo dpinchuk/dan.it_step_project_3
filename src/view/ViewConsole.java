@@ -7,11 +7,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static utils.Constants.EXIT;
+
 public class ViewConsole {
 
     private BookingController bookingController;
     private FlightController flightController;
-    private final String EXIT = "0";
 
     public void run() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -37,6 +38,10 @@ public class ViewConsole {
                 select(select);
             }
         }
+    }
+
+    private void initData() {
+
     }
 
     private void select(String select) {
