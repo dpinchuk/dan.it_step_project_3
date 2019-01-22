@@ -1,7 +1,5 @@
 package dao;
 
-import models.FlightModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
