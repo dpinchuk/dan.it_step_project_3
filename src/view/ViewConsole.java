@@ -2,6 +2,7 @@ package view;
 
 import controllers.BookingController;
 import controllers.FlightController;
+import controllers.InitDataController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +16,7 @@ public class ViewConsole {
     private FlightController flightController;
 
     public void run() {
+        initData();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String select = "";
         while (true) {
@@ -41,7 +43,7 @@ public class ViewConsole {
     }
 
     private void initData() {
-
+        InitDataController initDataController = new InitDataController();
     }
 
     private void select(String select) {
