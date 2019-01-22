@@ -1,7 +1,5 @@
 package dao;
 
-import models.MainModel;
-
 import java.util.List;
 
 public interface FlightDAO {

@@ -3,12 +3,11 @@ package services;
 import dao.FlightDAO;
 import dao.FlightDAOImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FlightService extends MainService implements FlightDAO {
 
-    private FlightDAOImpl flightList = new FlightDAOImpl();
+    private FlightDAOImpl flightListDAO = new FlightDAOImpl();
 
     @Override
     public String getFlightInfo(int id) {
@@ -21,7 +20,7 @@ public class FlightService extends MainService implements FlightDAO {
     }
 
     public void addFileDataToDAO(List<String> list) {
-        this.flightList.addFileDataToDAO(list);
+        this.flightListDAO.addFileDataToDAO(list);
     }
 
 }

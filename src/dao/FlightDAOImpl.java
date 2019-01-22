@@ -2,6 +2,7 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FlightDAOImpl implements FlightDAO {
 
@@ -19,8 +20,7 @@ public class FlightDAOImpl implements FlightDAO {
 
     @Override
     public void addFileDataToDAO(List<String> list) {
-        this.flightList = list;
-        System.out.println();
+        this.flightList = list.stream().collect(Collectors.toList());
     }
 
     public List<String> getFlightList() {
