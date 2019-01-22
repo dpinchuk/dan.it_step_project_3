@@ -8,7 +8,7 @@ import java.util.List;
 
 public class BookingDAOImpl implements BookingDAO {
 
-    private List<String> bookingModelList = new ArrayList<>();
+    private List<String> bookingModelList;
 
     @Override
     public BookingModel createBooking(FlightModel flight, String name, String surname) {

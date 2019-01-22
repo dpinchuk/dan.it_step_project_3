@@ -5,17 +5,7 @@ import java.util.List;
 
 public class FlightDAOImpl implements FlightDAO {
 
-    private List<String> flightModelList = new ArrayList<>();
-
-
-
-    public List<String> getFlightModelList() {
-        return flightModelList;
-    }
-
-    public void setFlightModelList(List<String> flightModelList) {
-        this.flightModelList = flightModelList;
-    }
+    private List<String> flightList = new ArrayList<>();
 
     @Override
     public String getFlightInfo(int id) {
@@ -29,6 +19,16 @@ public class FlightDAOImpl implements FlightDAO {
 
     @Override
     public void addFileDataToDAO(List<String> list) {
+        this.flightList = list;
+        System.out.println();
+    }
+
+    public List<String> getFlightList() {
+        return flightList;
+    }
+
+    public void setFlightList(List<String> flightList) {
+        this.flightList = flightList;
     }
 
 }

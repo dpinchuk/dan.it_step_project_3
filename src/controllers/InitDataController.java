@@ -1,5 +1,6 @@
 package controllers;
 
+import dao.FlightDAOImpl;
 import services.BookingService;
 import services.FlightService;
 
@@ -30,22 +31,6 @@ public class InitDataController {
             e.printStackTrace();
         }
         return new ArrayList<>();
-    }
-
-    public boolean addDataToFlightListDAO(List<String> list) {
-        if (list.size() != 0) {
-            this.flightService.addFileDataToDAO(list);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean addDataToBookingListDAO(List<String> list) {
-        if (list.size() != 0) {
-            this.bookingService.addFileDataToDAO(list);
-            return true;
-        }
-        return false;
     }
 
 }
