@@ -1,4 +1,4 @@
 package controllers;
 
-public class BookingController extends MainController {
+public class BookingController {
 }

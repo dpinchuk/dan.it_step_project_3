@@ -7,7 +7,7 @@ import models.FlightModel;
 
 import java.util.List;
 
-public class BookingService extends MainService implements BookingDAO {
+public class BookingService implements BookingDAO {
 
     private BookingDAOImpl bookingDAO = new BookingDAOImpl();
 

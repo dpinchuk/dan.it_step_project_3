@@ -1,4 +1,4 @@
-Date        Time   From    To      Seats  Occupied
+Date        Time   From    To       Seats  Occupied
 01/05/2019  20:45  Kiev    Prague   100    0
 03/05/2019  03:05  Kiev    Hurgada  200    0
 04/05/2019  12:20  Kiev    Berlin    90    0

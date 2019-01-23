@@ -1,6 +1,6 @@
 package models;
 
-public class BookingModel extends MainModel {
+public class BookingModel {
 
     // Нужно ли создавать этот объект, если можно просто обойтись коллекцией строк и с ней работать????
     // хз, как правильно?

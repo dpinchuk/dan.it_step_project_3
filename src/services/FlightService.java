@@ -5,7 +5,7 @@ import dao.FlightDAOImpl;
 
 import java.util.List;
 
-public class FlightService extends MainService implements FlightDAO {
+public class FlightService implements FlightDAO {
 
     private FlightDAOImpl flightListDAO = new FlightDAOImpl();
 
@@ -17,10 +17,6 @@ public class FlightService extends MainService implements FlightDAO {
     @Override
     public List<String> searchFlights(String direction, String date, int seatsNumber) {
         return null;
-    }
-
-    public void addFileDataToDAO(List<String> list) {
-        this.flightListDAO.addFileDataToDAO(list);
     }
 
     public FlightDAOImpl getFlightListDAO() {

@@ -1,12 +1,27 @@
 package dao;
 
+import models.FlightModel;
+import utils.Loader;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static utils.Constants.DATA_FILE_FLIGHTS;
+import static utils.Constants.DATA_FILE_FLIGHTS_FROM;
 
 public class FlightDAOImpl implements FlightDAO {
 
-    private List<String> flightList = new ArrayList<>();
+    private List<FlightModel> flightList;
+    private Loader loader;
+
+    {
+        try {
+            this.loader = new Loader(DATA_FILE_FLIGHTS_FROM, DATA_FILE_FLIGHTS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public String getFlightInfo(int id) {
@@ -18,16 +33,11 @@ public class FlightDAOImpl implements FlightDAO {
         return null;
     }
 
-    @Override
-    public void addFileDataToDAO(List<String> list) {
-        this.flightList = new ArrayList<>(list);
-    }
-
-    public List<String> getFlightList() {
+    public List<FlightModel> getFlightList() {
         return flightList;
     }
 
-    public void setFlightList(List<String> flightList) {
+    public void setFlightList(List<FlightModel> flightList) {
         this.flightList = flightList;
     }
 
