@@ -21,8 +21,7 @@ public class InitDataController {
 
     {
         this.flightService.addFileDataToDAO(getFileData(DATA_FILE_FLIGHTS));
-        FlightDAOImpl flightDAO = new FlightDAOImpl();
-        flightDAO.getFlightList().forEach(System.out::println);
+        //this.flightService.getFlightListDAO().getFlightList().forEach(System.out::println);
         this.bookingService.addFileDataToDAO(getFileData(DATA_FILE_BOOKINGS));
     }
 

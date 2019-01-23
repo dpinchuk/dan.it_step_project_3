@@ -23,4 +23,7 @@ public class FlightService extends MainService implements FlightDAO {
         this.flightListDAO.addFileDataToDAO(list);
     }
 
+    public FlightDAOImpl getFlightListDAO() {
+        return flightListDAO;
+    }
 }
