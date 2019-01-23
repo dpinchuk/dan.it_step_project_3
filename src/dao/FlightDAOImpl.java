@@ -3,11 +3,9 @@ package dao;
 import models.FlightModel;
 import utils.Loader;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import static utils.Constants.DATA_FILE_FLIGHTS;
+import static utils.Constants.DATA_FILE_FLIGHTS_TO;
 import static utils.Constants.DATA_FILE_FLIGHTS_FROM;
 
 public class FlightDAOImpl implements FlightDAO {
@@ -17,7 +15,7 @@ public class FlightDAOImpl implements FlightDAO {
 
     {
         try {
-            this.loader = new Loader(DATA_FILE_FLIGHTS_FROM, DATA_FILE_FLIGHTS);
+            this.loader = new Loader(DATA_FILE_FLIGHTS_FROM, DATA_FILE_FLIGHTS_TO);
         } catch (Exception e) {
             e.printStackTrace();
         }
