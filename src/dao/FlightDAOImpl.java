@@ -20,7 +20,7 @@ public class FlightDAOImpl implements FlightDAO {
 
     @Override
     public void addFileDataToDAO(List<String> list) {
-        this.flightList = list.stream().collect(Collectors.toList());
+        this.flightList = new ArrayList<>(list);
     }
 
     public List<String> getFlightList() {

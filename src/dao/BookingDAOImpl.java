@@ -3,6 +3,7 @@ package dao;
 import models.BookingModel;
 import models.FlightModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,7 @@ public class BookingDAOImpl implements BookingDAO {
 
     @Override
     public void addFileDataToDAO(List<String> list) {
-        this.bookingList = list.stream().collect(Collectors.toList());
+        this.bookingList = new ArrayList<>(list);
     }
 
     public List<String> getBookingModelList() {

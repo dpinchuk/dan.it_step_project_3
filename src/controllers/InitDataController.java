@@ -21,7 +21,7 @@ public class InitDataController {
 
     {
         this.flightService.addFileDataToDAO(getFileData(DATA_FILE_FLIGHTS));
-        //this.flightService.getFlightListDAO().getFlightList().forEach(System.out::println);
+        this.flightService.getFlightListDAO().getFlightList().forEach(System.out::println); //test!!!
         this.bookingService.addFileDataToDAO(getFileData(DATA_FILE_BOOKINGS));
     }
 
@@ -34,4 +34,19 @@ public class InitDataController {
         return new ArrayList<>();
     }
 
+    public FlightService getFlightService() {
+        return flightService;
+    }
+
+    public void setFlightService(FlightService flightService) {
+        this.flightService = flightService;
+    }
+
+    public BookingService getBookingService() {
+        return bookingService;
+    }
+
+    public void setBookingService(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
 }
