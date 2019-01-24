@@ -1,5 +1,6 @@
-Ivanov.ii   111111
-Petrov.pp   222222
-Sidoroff.ss 333333
-Smirnoff.ff 444444
-Sukin.mm    555555
+login        password
+Ivanov.ii    111111
+Petrov.pp    222222
+Sidoroff.ss  333333
+Smirnoff.ff  444444
+Sukin.mm     555555

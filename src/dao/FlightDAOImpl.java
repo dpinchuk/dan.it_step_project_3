@@ -4,18 +4,15 @@ import models.FlightModel;
 import utils.Loader;
 
 import java.util.List;
-
-import static utils.Constants.DATA_FILE_FLIGHTS_TO;
-import static utils.Constants.DATA_FILE_FLIGHTS_FROM;
+import java.util.stream.Collectors;
 
 public class FlightDAOImpl implements FlightDAO {
 
     private List<FlightModel> flightList;
-    private Loader loader;
 
-    {
+    public FlightDAOImpl() {
         try {
-            this.loader = new Loader(DATA_FILE_FLIGHTS_FROM, DATA_FILE_FLIGHTS_TO);
+            this.flightList = new Loader().getFlightModelList();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,16 +24,18 @@ public class FlightDAOImpl implements FlightDAO {
     }
 
     @Override
-    public List<String> searchFlights(String direction, String date, int seatsNumber) {
-        return null;
+    public List<FlightModel> searchFlights(String destination, String date, int seatsNumber) {
+        return this.flightList
+                .stream()
+                .filter(e ->
+                        e.getDestination().equals(destination) &&
+                        e.getDate().equals(date) &&
+                        e.getSeatsNumber() == seatsNumber)
+        .collect(Collectors.toList());
     }
 
     public List<FlightModel> getFlightList() {
         return flightList;
-    }
-
-    public void setFlightList(List<FlightModel> flightList) {
-        this.flightList = flightList;
     }
 
 }

@@ -1,6 +1,8 @@
 package models;
 
-public class BookingModel {
+import java.io.Serializable;
+
+public class BookingModel implements Serializable {
 
     // Нужно ли создавать этот объект, если можно просто обойтись коллекцией строк и с ней работать????
     // хз, как правильно?

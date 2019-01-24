@@ -1,6 +1,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class FlightModel implements Serializable {
 
@@ -9,10 +10,10 @@ public class FlightModel implements Serializable {
     private String time; //время отправки
     private String dispatchLocation; //место отправки
     private String destination; //место назначения
-    private String seatsNumber; //общее кол-во мест рейса
+    private int seatsNumber; //общее кол-во мест рейса
     private String occupiedPlaces; //кол-во занятых мест
 
-    public FlightModel(int flightId, String date, String time, String dispatchLocation, String destination, String seatsNumber, String occupiedPlaces) {
+    public FlightModel(int flightId, String date, String time, String dispatchLocation, String destination, int seatsNumber, String occupiedPlaces) {
         this.flightId = flightId;
         this.date = date;
         this.time = time;
@@ -20,6 +21,34 @@ public class FlightModel implements Serializable {
         this.destination = destination;
         this.seatsNumber = seatsNumber;
         this.occupiedPlaces = occupiedPlaces;
+    }
+
+    public int getFlightId() {
+        return flightId;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public String getDispatchLocation() {
+        return dispatchLocation;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public int getSeatsNumber() {
+        return seatsNumber;
+    }
+
+    public String getOccupiedPlaces() {
+        return occupiedPlaces;
     }
 
     @Override
@@ -33,5 +62,21 @@ public class FlightModel implements Serializable {
                 ", seatsNumber=" + seatsNumber +
                 ", occupiedPlaces=" + occupiedPlaces +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FlightModel that = (FlightModel) o;
+        return flightId == that.flightId &&
+                Objects.equals(date, that.date) &&
+                Objects.equals(destination, that.destination) &&
+                Objects.equals(seatsNumber, that.seatsNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, destination, seatsNumber);
     }
 }

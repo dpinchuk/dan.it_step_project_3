@@ -2,6 +2,7 @@ package services;
 
 import dao.FlightDAO;
 import dao.FlightDAOImpl;
+import models.FlightModel;
 
 import java.util.List;
 
@@ -11,15 +12,16 @@ public class FlightService implements FlightDAO {
 
     @Override
     public String getFlightInfo(int id) {
-        return null;
+        return this.flightListDAO.getFlightInfo(id);
     }
 
     @Override
-    public List<String> searchFlights(String direction, String date, int seatsNumber) {
-        return null;
+    public List<FlightModel> searchFlights(String destination, String date, int seatsNumber) {
+        return this.flightListDAO.searchFlights(destination, date, seatsNumber);
     }
 
-    public FlightDAOImpl getFlightListDAO() {
-        return flightListDAO;
+    public List<FlightModel> getFlightList() {
+        return this.flightListDAO.getFlightList();
     }
+
 }

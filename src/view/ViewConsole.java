@@ -2,21 +2,30 @@ package view;
 
 import controllers.BookingController;
 import controllers.FlightController;
-import controllers.InitDataController;
+import controllers.UserController;
+import models.FlightModel;
+import models.UserModel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import static utils.Constants.EXIT;
 
 public class ViewConsole {
 
-    private BookingController bookingController;
-    private FlightController flightController;
+    private FlightController flightController = new FlightController();
+    private BookingController bookingController = new BookingController();
+    private UserController userController = new UserController();
 
     public void run() {
-        initData();
+        List<FlightModel> flightList = this.flightController.getFlightList();
+        List<UserModel> userList = this.userController.getUserList();
+
+        flightList.forEach(System.out::println);
+        userList.forEach(System.out::println);
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String select = "";
         while (true) {
@@ -24,7 +33,7 @@ public class ViewConsole {
             System.out.print("Choose action: ");
             System.out.println("[0] - Exit");
             System.out.println("[1] - Online scoreboard");
-            System.out.println("[2] - 12View flight information");
+            System.out.println("[2] - View flight information");
             System.out.println("[3] - Flight search and booking");
             System.out.println("[4] - Cancel booking");
             System.out.println("[5] - My flights");
@@ -40,10 +49,6 @@ public class ViewConsole {
                 select(select);
             }
         }
-    }
-
-    private void initData() {
-        InitDataController initDataController = new InitDataController();
     }
 
     private void select(String select) {
