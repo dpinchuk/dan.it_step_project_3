@@ -11,9 +11,9 @@ public class FlightModel implements Serializable {
     private String dispatchLocation; //место отправки
     private String destination; //место назначения
     private int seatsNumber; //общее кол-во мест рейса
-    private String occupiedPlaces; //кол-во занятых мест
+    private int occupiedPlaces; //кол-во занятых мест
 
-    public FlightModel(int flightId, String date, String time, String dispatchLocation, String destination, int seatsNumber, String occupiedPlaces) {
+    public FlightModel(int flightId, String date, String time, String dispatchLocation, String destination, int seatsNumber, int occupiedPlaces) {
         this.flightId = flightId;
         this.date = date;
         this.time = time;
@@ -47,7 +47,7 @@ public class FlightModel implements Serializable {
         return seatsNumber;
     }
 
-    public String getOccupiedPlaces() {
+    public int getOccupiedPlaces() {
         return occupiedPlaces;
     }
 

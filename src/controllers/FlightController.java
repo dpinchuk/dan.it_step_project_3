@@ -1,16 +1,13 @@
 package controllers;
 
-import models.FlightModel;
-import services.FlightService;
-
-import java.util.List;
+import services.FlightServiceImpl;
 
 public class FlightController {
 
-    private FlightService flightService = new FlightService();
+    private FlightServiceImpl flightServiceImpl = new FlightServiceImpl();
 
-    public List<FlightModel> getFlightList() {
-        return this.flightService.getFlightList();
+    public FlightServiceImpl getFlightServiceImpl() {
+        return this.flightServiceImpl;
     }
 
 }

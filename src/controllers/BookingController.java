@@ -1,4 +1,4 @@
 package controllers;
 
-public class BookingController {
+public class BookingController  {
 }

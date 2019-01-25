@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FlightDAO {
 
-    String getFlightInfo(int id); //получаем информацию о рейсе по id
+    FlightModel getFlightInfo(int id); //получаем информацию о рейсе по id
 
     List<FlightModel> searchFlights(String destination, String date, int seatsNumber); //находит рейсы по указанным данным
 

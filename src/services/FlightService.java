@@ -1,27 +1,15 @@
 package services;
 
-import dao.FlightDAO;
-import dao.FlightDAOImpl;
 import models.FlightModel;
 
 import java.util.List;
 
-public class FlightService implements FlightDAO {
+public interface FlightService {
 
-    private FlightDAOImpl flightListDAO = new FlightDAOImpl();
+    List<FlightModel> getFlightsListNextHours(int ms); //выводит все рейсы в часовом промежутке
 
-    @Override
-    public String getFlightInfo(int id) {
-        return this.flightListDAO.getFlightInfo(id);
-    }
+    FlightModel getFlightInfo(int id); //получаем информацию о рейсе по id
 
-    @Override
-    public List<FlightModel> searchFlights(String destination, String date, int seatsNumber) {
-        return this.flightListDAO.searchFlights(destination, date, seatsNumber);
-    }
-
-    public List<FlightModel> getFlightList() {
-        return this.flightListDAO.getFlightList();
-    }
+    List<FlightModel> searchFlights(String destination, String date, int seatsNumber); //находит рейсы по указанным данным
 
 }

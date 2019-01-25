@@ -18,9 +18,18 @@ public class FlightDAOImpl implements FlightDAO {
         }
     }
 
+    public List<FlightModel> getFlightList() {
+        return flightList;
+    }
+
     @Override
-    public String getFlightInfo(int id) {
-        return null;
+    public FlightModel getFlightInfo(int id) {
+        return this.flightList
+                .stream()
+                .filter(e ->
+                            e.getFlightId() == id)
+                .findFirst()
+                .get();
     }
 
     @Override
@@ -28,14 +37,9 @@ public class FlightDAOImpl implements FlightDAO {
         return this.flightList
                 .stream()
                 .filter(e ->
-                        e.getDestination().equals(destination) &&
-                        e.getDate().equals(date) &&
-                        e.getSeatsNumber() == seatsNumber)
-        .collect(Collectors.toList());
+                            e.getDestination().toLowerCase().equals(destination.toLowerCase()) &&
+                            e.getDate().equals(date) &&
+                            (e.getSeatsNumber() - e.getOccupiedPlaces()) >= seatsNumber)
+                .collect(Collectors.toList());
     }
-
-    public List<FlightModel> getFlightList() {
-        return flightList;
-    }
-
 }

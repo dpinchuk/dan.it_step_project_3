@@ -12,4 +12,8 @@ public interface Constants {
     String DATA_FILE_USERS_FROM = "src/dataFiles/usersFrom.txt";
     String DATA_FILE_USERS_TO = "src/dataFiles/usersTo.txt";
 
+    int DIFFERENCE = 24 * 60 * 60 * 1000;
+
+    String DATE_PATTERN = "yyyy-MM-dd";
+
 }
