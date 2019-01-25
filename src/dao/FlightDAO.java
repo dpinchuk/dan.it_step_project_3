@@ -10,4 +10,6 @@ public interface FlightDAO {
 
     List<FlightModel> searchFlights(String destination, String date, int seatsNumber); //находит рейсы по указанным данным
 
+    boolean updateOccupiedPlaces(int flight, int places);
+
 }

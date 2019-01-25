@@ -4,7 +4,10 @@ import models.FlightModel;
 import utils.Loader;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class FlightDAOImpl implements FlightDAO {
 
@@ -24,12 +27,18 @@ public class FlightDAOImpl implements FlightDAO {
 
     @Override
     public FlightModel getFlightInfo(int id) {
-        return this.flightList
-                .stream()
-                .filter(e ->
+        FlightModel flightModel;
+        try {
+            flightModel = this.flightList
+                    .stream()
+                    .filter(e ->
                             e.getFlightId() == id)
-                .findFirst()
-                .get();
+                    .findFirst()
+                    .get();
+        } catch (NoSuchElementException e) {
+            flightModel = null;
+        }
+        return flightModel;
     }
 
     @Override
@@ -42,4 +51,24 @@ public class FlightDAOImpl implements FlightDAO {
                             (e.getSeatsNumber() - e.getOccupiedPlaces()) >= seatsNumber)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean updateOccupiedPlaces(int flight, int places) {
+        OptionalInt indexOpt = IntStream.range(0, this.getFlightList().size())
+                .filter(i -> flight == this.getFlightList().get(i).getFlightId())
+                .findFirst();
+        int index = indexOpt.getAsInt();
+        FlightModel flightModel = new FlightModel(
+                this.flightList.get(index).getFlightId(),
+                this.flightList.get(index).getDate(),
+                this.flightList.get(index).getTime(),
+                this.flightList.get(index).getDispatchLocation(),
+                this.flightList.get(index).getDestination(),
+                this.flightList.get(index).getSeatsNumber(),
+                places);
+        this.getFlightList().remove(index);
+        this.getFlightList().add(index, flightModel);
+        return false;
+    }
+
 }

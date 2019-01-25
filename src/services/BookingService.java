@@ -1,48 +1,19 @@
 package services;
 
-import dao.BookingDAO;
-import dao.BookingDAOImpl;
 import models.BookingModel;
-import models.FlightModel;
 
 import java.util.List;
 
-public class BookingService implements BookingDAO {
+public interface BookingService {
 
-    private BookingDAOImpl bookingDAO = new BookingDAOImpl();
+    int createBooking(int flightId, String name, String surname, int seatsNumber); //создает бронированный рейс
 
-    @Override
-    public BookingModel createBooking(FlightModel flight, String name, String surname) {
-        return null;
-    }
+    boolean deleteBooking(int id); //удаляет бронированный рейс по id
 
-    @Override
-    public boolean deleteBooking(int id) {
-        return false;
-    }
+    List<BookingModel> getBookings(int bookingId); //получаем забронированный рейс по id
 
-    @Override
-    public boolean deleteBooking(BookingModel booking) {
-        return false;
-    }
+    List<BookingModel> getUserBookings(String name, String surname); //получаем список забронированных рейсов юзера
 
-    @Override
-    public List<String> getAllBookings() {
-        return null;
-    }
-
-    @Override
-    public List<String> getBookings(int bookingId) {
-        return null;
-    }
-
-    @Override
-    public List<String> getUserBookings(String name, String surname) {
-        return null;
-    }
-
-    public void addFileDataToDAO(List<String> list) {
-        this.bookingDAO.setBookingModelList(list);
-    }
+    void addFileDataToDAO(List<BookingModel> list); //добавляет список, полученный из файла, в DAO list
 
 }

@@ -39,6 +39,11 @@ public class FlightServiceImpl implements FlightService {
         return this.flightListDAO.searchFlights(destination, date, seatsNumber);
     }
 
+    @Override
+    public boolean updateOccupiedPlaces(int[] flightAndOccupiedPlaces) {
+        return this.flightListDAO.updateOccupiedPlaces(flightAndOccupiedPlaces[0], flightAndOccupiedPlaces[1]);
+    }
+
     public List<FlightModel> getFlightList() {
         return this.flightListDAO.getFlightList();
     }

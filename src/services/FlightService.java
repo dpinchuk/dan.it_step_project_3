@@ -12,4 +12,6 @@ public interface FlightService {
 
     List<FlightModel> searchFlights(String destination, String date, int seatsNumber); //находит рейсы по указанным данным
 
+    boolean updateOccupiedPlaces(int[] flightAndOccupiedPlaces); // изменяет occupiedPlace
+
 }

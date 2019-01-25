@@ -51,6 +51,10 @@ public class FlightModel implements Serializable {
         return occupiedPlaces;
     }
 
+    public void setOccupiedPlaces(int occupiedPlaces) {
+        this.occupiedPlaces = occupiedPlaces;
+    }
+
     @Override
     public String toString() {
         return "FlightModel{" +

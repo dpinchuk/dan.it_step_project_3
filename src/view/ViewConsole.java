@@ -54,25 +54,22 @@ public class ViewConsole {
     private void select(String select) {
         switch (select) {
             case "1":
-                actionFlightsInfo();
+                actionFlightsInfoNextOurs();
                 break;
             case "2":
                 actionFlightViewById();
                 break;
             case "3":
-                int id = actionFlightsSelectAndBooking();
-                if (id > 0) {
-                    bookFlight(id);
-                }
+                actionSearchFlightByDataAndBooking();
                 break;
             case "4":
-                // вызываем контроллер, в нем сервис, а в нем дао
+                actionCancelFlightBooking();
                 break;
             case "5":
-                // вызываем контроллер, в нем сервис, а в нем дао
+                //TODO
                 break;
             case "6":
-                // вызываем контроллер, в нем сервис, а в нем дао
+                //TODO
                 break;
             default:
                 break;
@@ -81,11 +78,11 @@ public class ViewConsole {
     }
 
     private String getDateInFormat(LocalDate date) {
-        return date.format(DateTimeFormatter.ofPattern("yyy-mm-dd"));
+        return date.format(DateTimeFormatter.ofPattern(DATE_PATTERN));
     }
 
     private String getTimeInFormat(LocalTime time) {
-        return time.format(DateTimeFormatter.ofPattern("hh:mm"));
+        return time.format(DateTimeFormatter.ofPattern(TIME_PATTERN));
     }
 
     private int getHoursFromMilli(long ms) {
@@ -94,32 +91,32 @@ public class ViewConsole {
 
     private void printFlightList(List<FlightModel> list) {
         if (list.size() == 0) {
-            System.out.println("\n\nYour search for nothing was found.");
+            System.out.println("\n\n" + SEARCH_NOTHING);
         } else {
             list.forEach(e -> System.out.println("\n\n" +
                     e.getFlightId() + "\t\t" +
-                            e.getDate() + "\t\t" +
-                            e.getTime() + "\t\t" +
-                            e.getDispatchLocation() + "\t\t" +
-                            e.getDestination() + "\t\t" +
-                            e.getSeatsNumber() + "\t\t" +
-                            e.getOccupiedPlaces()
+                    e.getDate() + "\t\t" +
+                    e.getTime() + "\t\t" +
+                    e.getDispatchLocation() + "\t\t" +
+                    e.getDestination() + "\t\t" +
+                    e.getSeatsNumber() + "\t\t" +
+                    e.getOccupiedPlaces()
             ));
         }
     }
 
     private void printFlight(FlightModel flight) {
         if (flight == null) {
-            System.out.println("\n\nYour search for nothing was found.");
+            System.out.println("\n\n" + SEARCH_NOTHING);
         } else {
             System.out.println("\n\n" +
                     flight.getFlightId() + "\t\t" +
-                            flight.getDate() + "\t\t" +
-                            flight.getTime() + "\t\t" +
-                            flight.getDispatchLocation() + "\t\t" +
-                            flight.getDestination() + "\t\t" +
-                            flight.getSeatsNumber() + "\t\t" +
-                            flight.getOccupiedPlaces()
+                    flight.getDate() + "\t\t" +
+                    flight.getTime() + "\t\t" +
+                    flight.getDispatchLocation() + "\t\t" +
+                    flight.getDestination() + "\t\t" +
+                    flight.getSeatsNumber() + "\t\t" +
+                    flight.getOccupiedPlaces()
             );
         }
     }
@@ -129,27 +126,27 @@ public class ViewConsole {
         try {
             id = Integer.parseInt(str);
         } catch (NumberFormatException e) {
-            System.out.println("\n\nYour search for nothing was found.");
+            System.out.println("\n\n" + SEARCH_NOTHING);
         }
         if (id >= 0 && id < this.flightController.getFlightServiceImpl().getFlightList().size()) {
             return id;
         }
-        System.out.println("Incorrect input data!");
-        System.out.println("id must be between [" + 0 + "] and [" + this.flightController.getFlightServiceImpl().getFlightList().size() + "]!");
+        System.out.println(INVALID_DATA);
+        System.out.println("id must be between [1] and [" + this.flightController.getFlightServiceImpl().getFlightList().size() + "]!");
         return 0;
     }
 
-    private int getNumberFromString(String str){
+    private int getNumberFromString(String str) {
         int num = 0;
         try {
             num = Integer.parseInt(str);
         } catch (NumberFormatException e) {
-            System.out.println("Invalid data!");
+            System.out.println(INVALID_DATA);
         }
         if (num > 0 && num <= 100) {
             return num;
         }
-        System.out.println("Incorrect data!");
+        System.out.println(INVALID_DATA);
         return 0;
     }
 
@@ -162,14 +159,14 @@ public class ViewConsole {
         return false;
     }
 
-    private void actionFlightsInfo() {
+    private void actionFlightsInfoNextOurs() {
         System.out.println("\n\n[Information on all flights from Kiev in the next {" + getHoursFromMilli(DIFFERENCE) + "} hours]");
         printFlightList(this.flightController.getFlightServiceImpl().getFlightsListNextHours(DIFFERENCE));
     }
 
     private void actionFlightViewById() {
         System.out.println("\n\n[View flight information]");
-        System.out.println("Flight [id] must be between [" + 0 + "] and [" + this.flightController.getFlightServiceImpl().getFlightList().size() + "]!");
+        System.out.println("Flight [id] must be between [1] and [" + this.flightController.getFlightServiceImpl().getFlightList().size() + "]!");
         String id = "";
         System.out.print("Input Flight [id]: ");
         try {
@@ -182,65 +179,111 @@ public class ViewConsole {
         }
     }
 
-    private int actionFlightsSelectAndBooking() {
+    private void actionSearchFlightByDataAndBooking() {
         System.out.println("\n\n[Flight search and booking]");
+
         String destination = "";
         String date = "";
         String ticketsNumber = "";
-        System.out.println("1. Destination must be consist of letters and case does not matter [berlin, MADRID]!");
+
+        System.out.println("1. Destination must be consist of letters and case does not matter [Kiev, berlin, MADRID]!");
         System.out.print("Input destination: ");
         try {
             destination = this.reader.readLine();
-        } catch (IOException e) {
-            //TODO Exception!
-            System.out.println("Incorrect data!");
-        }
-        System.out.println("\n2. Date must be in a format 'YYYY-MM-DD'!");
-        System.out.print("Input date: ");
-        try {
-            date = this.reader.readLine();
-        } catch (IOException | IllegalArgumentException e) {
-            //TODO Exception!
-            System.out.println("Incorrect data!");
-        }
-        System.out.println("\n3. Number of tickets must be less than 100!");
-        System.out.print("Input number of tickets: ");
-        try {
-            ticketsNumber = this.reader.readLine();
-        } catch (IOException e) {
-            //TODO Exception!
-            System.out.println("Incorrect data!");
-        }
-        List<FlightModel> listFlights = this.flightController.getFlightServiceImpl().searchFlights(destination, date, getNumberFromString(ticketsNumber));
-        printFlightList(listFlights);
-        if (listFlights.size() > 0) {
-            int idSelect = 0;
-            int[] idArr = listFlights.stream().mapToInt(FlightModel::getFlightId).toArray();
-            System.out.println("\n\n4. Flight [id] must be in " + Arrays.toString(idArr) + "!");
-            System.out.print("Choose a flight and input [id]: ");
+
+            System.out.println("\n2. Date must be in a format [YYYY-MM-DD]!");
+            System.out.print("Input date: ");
             try {
-                String str = this.reader.readLine();
-                if (str.equals(EXIT)) {
-                    //TODO Exception!
-                    System.out.println("EXIT from action!");
-                } else {
-                    idSelect = getId(str);
-                    if (isInputNumberIsInArrayOfFlightId(idSelect, idArr)) {
-                        return idSelect;
-                    } else {
-                        //TODO Exception!
-                        System.out.println("Incorrect input data!");
+                date = this.reader.readLine();
+
+                System.out.println("\n3. Number of tickets must be less than 100!");
+                System.out.print("Input number of tickets: ");
+                try {
+                    ticketsNumber = this.reader.readLine();
+
+                    List<FlightModel> listFlights = this.flightController.getFlightServiceImpl().searchFlights(destination, date, getNumberFromString(ticketsNumber));
+                    printFlightList(listFlights);
+
+                    if (listFlights.size() > 0) {
+                        int flightIdSelect = 0;
+                        int[] idArr = listFlights.stream().mapToInt(FlightModel::getFlightId).toArray();
+                        System.out.println("\n\n4. Flight [id] must be in " + Arrays.toString(idArr) + "!");
+                        System.out.print("Choose a flight and input [id]: ");
+                        try {
+                            String str = this.reader.readLine();
+                            if (str.equals(EXIT)) {
+                                //TODO Exception!
+                                System.out.println(BREAK_ACTION);
+                            } else {
+                                flightIdSelect = getId(str);
+                                if (isInputNumberIsInArrayOfFlightId(flightIdSelect, idArr)) {
+                                    int booking = bookingFlight(new int[]{flightIdSelect, Integer.parseInt(ticketsNumber)});
+                                    if (booking != 0) {
+                                        System.out.println(OPERATION_SUCCESS + " [" + booking + "]");
+                                    } else {
+                                        System.out.println(OPERATION_ERROR);
+                                    }
+                                } else {
+                                    //TODO Exception!
+                                    System.out.println(INVALID_DATA);
+                                }
+                            }
+                        } catch (IOException e) {
+                            //TODO Exception!
+                            System.out.println(INVALID_DATA);
+                        }
                     }
+                } catch (IOException e) {
+                    //TODO Exception!
+                    System.out.println(INVALID_DATA);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException | IllegalArgumentException e) {
+                //TODO Exception!
+                System.out.println(INVALID_DATA);
             }
+        } catch (IOException e) {
+            //TODO Exception!
+            System.out.println(INVALID_DATA);
+        }
+    }
+
+    private int bookingFlight(int[] dataForBooking) {
+        int flightId = dataForBooking[0];
+        String passengerName = "";
+        String passengerSurname = "";
+        int seatsNumber = dataForBooking[1];
+        System.out.print("\nInput your name: ");
+        try {
+            passengerName = this.reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.print("Input your surname: ");
+        try {
+            passengerSurname = this.reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int booking = this.bookingController.getBookingService().createBooking(flightId, passengerName, passengerSurname, seatsNumber);
+        if (booking != 0) {
+            return booking;
         }
         return 0;
     }
 
-    private void bookFlight(int flightId) {
-        this.bookingController
+    private void actionCancelFlightBooking() {
+        int bookingId = 0;
+        System.out.print("\nInput [id] your flight booking: ");
+        try {
+            String data = this.reader.readLine();
+            bookingId = getNumberFromString(data);
+        } catch (IOException e) {
+        }
+        if(this.bookingController.getBookingService().deleteBooking(bookingId)) {
+            System.out.println(OPERATION_SUCCESS + " [" + bookingId + "]");
+        } else {
+            System.out.println(OPERATION_ERROR);
+        }
     }
 
 }

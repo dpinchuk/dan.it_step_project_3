@@ -1,56 +1,61 @@
 package dao;
 
 import models.BookingModel;
-import models.FlightModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 
 public class BookingDAOImpl implements BookingDAO {
 
-    private List<String> bookingList;
+    private List<BookingModel> bookingList = new ArrayList<>();
+    private BookingModel bookingModel;
+    private int bookingId = 0;
 
     @Override
-    public BookingModel createBooking(FlightModel flight, String name, String surname) {
-        return null;
+    public int createBooking(int flightId, String name, String surname, int seatsNumber) {
+        this.bookingModel = new BookingModel(++bookingId, flightId, name, surname, seatsNumber);
+        bookingList.add(this.bookingModel);
+        return this.bookingModel.getOrder();
     }
 
     @Override
     public boolean deleteBooking(int id) {
+        BookingModel bookingModel;
+        try {
+            bookingModel = this.bookingList
+                    .stream()
+                    .filter(e ->
+                            e.getOrder() == id)
+                    .findFirst()
+                    .get();
+            this.bookingList.remove(bookingModel);
+            return true;
+        } catch (NoSuchElementException e) {
+        }
         return false;
     }
 
     @Override
-    public boolean deleteBooking(BookingModel booking) {
-        return false;
-    }
-
-    @Override
-    public List<String> getAllBookings() {
+    public List<BookingModel> getBookings(int bookingId) {
         return null;
     }
 
     @Override
-    public List<String> getBookings(int bookingId) {
+    public List<BookingModel> getUserBookings(String name, String surname) {
         return null;
     }
 
     @Override
-    public List<String> getUserBookings(String name, String surname) {
-        return null;
-    }
-
-    @Override
-    public void addFileDataToDAO(List<String> list) {
+    public void addFileDataToDAO(List<BookingModel> list) {
         this.bookingList = new ArrayList<>(list);
     }
 
-    public List<String> getBookingModelList() {
+    public List<BookingModel> getBookingModelList() {
         return bookingList;
     }
 
-    public void setBookingModelList(List<String> bookingModelList) {
+    public void setBookingModelList(List<BookingModel> bookingModelList) {
         this.bookingList = bookingModelList;
     }
 

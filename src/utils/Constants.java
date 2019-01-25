@@ -14,6 +14,18 @@ public interface Constants {
 
     int DIFFERENCE = 24 * 60 * 60 * 1000;
 
-    String DATE_PATTERN = "yyyy-MM-dd";
+    String DATE_PATTERN = "yyyy-mm-dd";
+
+    String TIME_PATTERN = "hh:mm";
+
+    String SEARCH_NOTHING = "Search did not return results!";
+
+    String INVALID_DATA = "Invalid data!";
+
+    String OPERATION_SUCCESS = "Operation success!";
+
+    String OPERATION_ERROR = "Operation error!";
+
+    String BREAK_ACTION = "Break action!";
 
 }
