@@ -21,54 +21,55 @@ public class FlightDAOImpl implements FlightDAO {
         }
     }
 
-    public List<FlightModel> getFlightList() {
-        return flightList;
-    }
-
     @Override
-    public FlightModel getFlightInfo(int id) {
-        FlightModel flightModel;
+    public FlightModel getFlightById(int id) {
         try {
-            flightModel = this.flightList
+            return this.flightList
                     .stream()
                     .filter(e ->
-                            e.getFlightId() == id)
+                            e.getId() == id)
                     .findFirst()
                     .get();
         } catch (NoSuchElementException e) {
-            flightModel = null;
         }
-        return flightModel;
+        return null;
     }
 
     @Override
-    public List<FlightModel> searchFlights(String destination, String date, int seatsNumber) {
+    public List<FlightModel> getFlightByData(String destination, String date, int seatsNumber) {
         return this.flightList
                 .stream()
                 .filter(e ->
-                            e.getDestination().toLowerCase().equals(destination.toLowerCase()) &&
-                            e.getDate().equals(date) &&
-                            (e.getSeatsNumber() - e.getOccupiedPlaces()) >= seatsNumber)
+                        e.getDestination().toLowerCase().equals(destination.toLowerCase()) &&
+                                e.getDate().equals(date) &&
+                                (e.getSeatsLeft()) >= seatsNumber)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public boolean updateOccupiedPlaces(int flight, int places) {
+    public boolean updateFlightOccupiedPlaces(int[] flightIdAndNumberPlaces) {
         OptionalInt indexOpt = IntStream.range(0, this.getFlightList().size())
-                .filter(i -> flight == this.getFlightList().get(i).getFlightId())
+                .filter(i -> flightIdAndNumberPlaces[0] == this.getFlightList().get(i).getId())
                 .findFirst();
-        int index = indexOpt.getAsInt();
+        int index = 0;
+        if (indexOpt.isPresent()) {
+            index = indexOpt.getAsInt();
+        }
         FlightModel flightModel = new FlightModel(
-                this.flightList.get(index).getFlightId(),
+                this.flightList.get(index).getId(),
                 this.flightList.get(index).getDate(),
                 this.flightList.get(index).getTime(),
                 this.flightList.get(index).getDispatchLocation(),
                 this.flightList.get(index).getDestination(),
                 this.flightList.get(index).getSeatsNumber(),
-                places);
+                this.flightList.get(index).getSeatsLeft() - flightIdAndNumberPlaces[1]);
         this.getFlightList().remove(index);
         this.getFlightList().add(index, flightModel);
-        return false;
+        return this.getFlightList().contains(flightModel);
+    }
+
+    public List<FlightModel> getFlightList() {
+        return flightList;
     }
 
 }

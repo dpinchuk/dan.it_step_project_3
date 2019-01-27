@@ -5,49 +5,54 @@ import java.util.Objects;
 
 public class BookingModel implements Serializable {
 
-    private int order; //id бронирования рейса
+    private int id; //id бронирования рейса
     private int flightId; //id рейса
-    private String passengerName; //имя пассажира
-    private String passengerSurname; //фамилия пассажира
-    private int seatsNumber; //количество мест
+    private String name; //имя пассажира
+    private String surname; //фамилия пассажира
+    private int seatsRemaining; //количество оставшихся мест
+    private int userHash; //принадлежность конкретному пользователю
 
-    public BookingModel(int order, int flightId, String passengerName, String passengerSurname, int seatsNumber) {
-        this.order = order;
+    public BookingModel(int id, int flightId, String name, String surname, int seatsRemaining, int userHash) {
+        this.id = id;
         this.flightId = flightId;
-        this.passengerName = passengerName;
-        this.passengerSurname = passengerSurname;
-        this.seatsNumber = seatsNumber;
+        this.name = name;
+        this.surname = surname;
+        this.seatsRemaining = seatsRemaining;
+        this.userHash = userHash;
     }
 
-    public int getOrder() {
-        return order;
+    public int getId() {
+        return id;
     }
 
     public int getFlightId() {
         return flightId;
     }
 
-    public String getPassengerName() {
-        return passengerName;
+    public String getName() {
+        return name;
     }
 
-    public String getPassengerSurname() {
-        return passengerSurname;
+    public String getSurname() {
+        return surname;
     }
 
-    public int getSeatsNumber() {
-        return seatsNumber;
+    public int getSeatsRemaining() {
+        return seatsRemaining;
+    }
+
+    public int getUserHash() {
+        return userHash;
     }
 
     @Override
     public String toString() {
-        return "BookingModel{" +
-                "order=" + order +
-                ", flightId=" + flightId +
-                ", passengerName='" + passengerName + '\'' +
-                ", passengerSurname='" + passengerSurname + '\'' +
-                ", seatsNumber=" + seatsNumber +
-                '}';
+        return id +
+                "\t\t\t\t" + flightId +
+                "\t\t\t\t" + name +
+                "\t\t\t\t" + surname +
+                "\t\t\t\t" + seatsRemaining +
+                "\t\t\t\t" + userHash;
     }
 
     @Override
@@ -55,13 +60,14 @@ public class BookingModel implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookingModel that = (BookingModel) o;
-        return order == that.order &&
-                Objects.equals(passengerName, that.passengerName) &&
-                Objects.equals(passengerSurname, that.passengerSurname);
+        return userHash == that.userHash &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(surname, that.surname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(order, passengerName, passengerSurname);
+        return Objects.hash(id, name, surname, userHash);
     }
+
 }

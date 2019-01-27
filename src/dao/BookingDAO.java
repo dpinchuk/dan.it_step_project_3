@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface BookingDAO {
 
-    int createBooking(int flightId, String name, String surname, int seatsNumber); //создает бронированный рейс
+    int createBooking(int flightId, String name, String surname, int seatsNumber, int userHash); //создает бронированный рейс
 
-    boolean deleteBooking(int id); //удаляет бронированный рейс по id
+    boolean deleteBookingById(int id); //удаляет бронированный рейс по id
 
-    List<BookingModel> getBookings(int bookingId); //получаем забронированный рейс по id
+    BookingModel getBookingById(int id); //получаем забронированный рейс по id
 
-    List<BookingModel> getUserBookings(String name, String surname); //получаем список забронированных рейсов юзера
+    List<BookingModel> getUserBookings(String name, String surname); //получаем список забронированных рейсов юзера //TODO
 
-    void addFileDataToDAO(List<BookingModel> list); //добавляет список, полученный из файла, в DAO list
+    List<BookingModel> getUserBookings(int sessionId); //получаем список забронированных рейсов авторизованного юзера
 
 }

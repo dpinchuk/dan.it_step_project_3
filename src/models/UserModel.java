@@ -1,6 +1,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class UserModel implements Serializable {
 
@@ -26,13 +27,29 @@ public class UserModel implements Serializable {
         return password;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
-        return "UserModel{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return id +
+                "\t\t\t\t" + login +
+                "\t\t\t\t" + password +
+                "\t\t\t\t" + this.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserModel userModel = (UserModel) o;
+        return Objects.equals(login, userModel.login);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(login);
     }
 
 }

@@ -1,6 +1,8 @@
 login        password
-Ivanov.ii    111111
-Petrov.pp    222222
-Sidoroff.ss  333333
-Smirnoff.ff  444444
-Sukin.mm     555555
+ivanoff.ii   111111
+petrov.pp    222222
+sidoroff.ss  333333
+smirnoff.ff  444444
+sukin.mm     555555
+pinchuk.da   111111
+dima1978     111278

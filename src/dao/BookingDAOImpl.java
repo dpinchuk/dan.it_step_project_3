@@ -5,58 +5,66 @@ import models.BookingModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class BookingDAOImpl implements BookingDAO {
 
     private List<BookingModel> bookingList = new ArrayList<>();
-    private BookingModel bookingModel;
     private int bookingId = 0;
 
     @Override
-    public int createBooking(int flightId, String name, String surname, int seatsNumber) {
-        this.bookingModel = new BookingModel(++bookingId, flightId, name, surname, seatsNumber);
-        bookingList.add(this.bookingModel);
-        return this.bookingModel.getOrder();
+    public int createBooking(int flightId, String name, String surname, int seatsNumber, int userHash) {
+        BookingModel bookingModel = new BookingModel(++bookingId, flightId, name, surname, seatsNumber, userHash);
+        this.bookingList.add(bookingModel);
+        return bookingModel.getId();
     }
 
     @Override
-    public boolean deleteBooking(int id) {
-        BookingModel bookingModel;
+    public boolean deleteBookingById(int id) {
         try {
-            bookingModel = this.bookingList
+            return this.bookingList.remove(this.bookingList
                     .stream()
                     .filter(e ->
-                            e.getOrder() == id)
+                            e.getId() == id)
                     .findFirst()
-                    .get();
-            this.bookingList.remove(bookingModel);
-            return true;
+                    .get());
         } catch (NoSuchElementException e) {
         }
         return false;
     }
 
     @Override
-    public List<BookingModel> getBookings(int bookingId) {
-        return null;
+    public BookingModel getBookingById(int id) {
+        try {
+            return this.bookingList
+                    .stream()
+                    .filter(e ->
+                            e.getId() == id)
+                    .findFirst()
+                    .get();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 
     @Override
     public List<BookingModel> getUserBookings(String name, String surname) {
-        return null;
+        return this.getBookingModelList()
+                .stream()
+                .filter(e -> (e.getName().equals(name) && e.getSurname().equals(surname)))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void addFileDataToDAO(List<BookingModel> list) {
-        this.bookingList = new ArrayList<>(list);
+    public List<BookingModel> getUserBookings(int sessionId) {
+        return this.getBookingModelList()
+                .stream()
+                .filter(e -> e.getUserHash() == sessionId)
+                .collect(Collectors.toList());
     }
 
     public List<BookingModel> getBookingModelList() {
         return bookingList;
-    }
-
-    public void setBookingModelList(List<BookingModel> bookingModelList) {
-        this.bookingList = bookingModelList;
     }
 
 }

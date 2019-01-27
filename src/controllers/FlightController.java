@@ -4,10 +4,10 @@ import services.FlightServiceImpl;
 
 public class FlightController {
 
-    private FlightServiceImpl flightServiceImpl = new FlightServiceImpl();
+    private FlightServiceImpl flightService = new FlightServiceImpl();
 
-    public FlightServiceImpl getFlightServiceImpl() {
-        return this.flightServiceImpl;
+    public FlightServiceImpl getFlightService() {
+        return this.flightService;
     }
 
 }

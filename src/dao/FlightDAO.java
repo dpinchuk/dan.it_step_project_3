@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface FlightDAO {
 
-    FlightModel getFlightInfo(int id); //получаем информацию о рейсе по id
+    FlightModel getFlightById(int id); //возвращает рейс по id
 
-    List<FlightModel> searchFlights(String destination, String date, int seatsNumber); //находит рейсы по указанным данным
+    List<FlightModel> getFlightByData(String destination, String date, int seatsNumber); //находит рейсы по указанным данным
 
-    boolean updateOccupiedPlaces(int flight, int places);
+    boolean updateFlightOccupiedPlaces(int[] flightIdAndNumberPlaces); //изменяет количество занятых мест рейса
 
 }

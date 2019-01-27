@@ -10,13 +10,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FlightServiceImpl implements FlightService {
+public class FlightServiceImpl extends MainService implements FlightService {
 
-    private FlightDAOImpl flightListDAO = new FlightDAOImpl();
+    private FlightDAOImpl flightDAO = new FlightDAOImpl();
 
     @Override
     public List<FlightModel> getFlightsListNextHours(int ms) {
-        return this.flightListDAO.getFlightList()
+        return this.flightDAO.getFlightList()
                 .stream()
                 .filter(e -> {
                     try {
@@ -30,22 +30,17 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public FlightModel getFlightInfo(int id) {
-        return this.flightListDAO.getFlightInfo(id);
+    public String getFlightInfo(int id) {
+        return this.flightDAO.getFlightById(id).toString();
     }
 
     @Override
-    public List<FlightModel> searchFlights(String destination, String date, int seatsNumber) {
-        return this.flightListDAO.searchFlights(destination, date, seatsNumber);
+    public boolean isFlightExist(int id) {
+        return this.flightDAO.getFlightById(id) != null;
     }
 
-    @Override
-    public boolean updateOccupiedPlaces(int[] flightAndOccupiedPlaces) {
-        return this.flightListDAO.updateOccupiedPlaces(flightAndOccupiedPlaces[0], flightAndOccupiedPlaces[1]);
-    }
-
-    public List<FlightModel> getFlightList() {
-        return this.flightListDAO.getFlightList();
+    public FlightDAOImpl getFlightDAO() {
+        return flightDAO;
     }
 
     private boolean compareDateFlightWithDateNow(String date, String time, int difference) throws ParseException {

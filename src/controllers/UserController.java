@@ -1,16 +1,13 @@
 package controllers;
 
-import models.UserModel;
-import services.UserService;
-
-import java.util.List;
+import services.UserServiceImpl;
 
 public class UserController {
 
-    private UserService flightService = new UserService();
+    private UserServiceImpl userService = new UserServiceImpl();
 
-    public List<UserModel> getUserList() {
-        return this.flightService.getUserList();
+    public UserServiceImpl getUserService() {
+        return userService;
     }
 
 }
