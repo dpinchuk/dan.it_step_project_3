@@ -6,10 +6,14 @@ import java.util.List;
 
 public interface FlightService {
 
-    List<FlightModel> getFlightsListNextHours(int ms); //выводит все рейсы в часовом промежутке ms
+    List<FlightModel> getFlightsListNextHours(int milliFlight); //РІС‹РІРѕРґРёС‚ РІСЃРµ СЂРµР№СЃС‹ РІ С‡Р°СЃРѕРІРѕРј РїСЂРѕРјРµР¶СѓС‚РєРµ ms
 
-    String getFlightInfo(int id); //получаем информацию о рейсе по id
+    String getFlightInfo(int id); //РїРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ СЂРµР№СЃРµ РїРѕ id
 
-    boolean isFlightExist(int id); //проверяет существование рейса по id
+    boolean isFlightExist(int id); //РїСЂРѕРІРµСЂСЏРµС‚ СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёРµ СЂРµР№СЃР° РїРѕ id
+
+    List<FlightModel> getFlightByData(String destination, String date, int seatsNumber); //РІРѕР·РІСЂР°С‰Р°РµС‚ СЃРїРёСЃРѕРє СЂРµР№СЃРѕРІ РїРѕ РґР°РЅРЅС‹Рј
+
+    boolean updateFlightOccupiedPlaces(int[] flightIdAndNumberPlaces);
 
 }

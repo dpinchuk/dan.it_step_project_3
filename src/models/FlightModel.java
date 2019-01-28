@@ -1,22 +1,21 @@
 package models;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class FlightModel implements Serializable {
 
     private int id; //id рейса
-    private String date; //дата отправки
-    private String time; //время отправки
+    private LocalDateTime dateTime; //дата и время отправки
     private String dispatchLocation; //место отправки
     private String destination; //место назначения
     private int seatsNumber; //общее кол-во мест рейса
     private int seatsLeft; //кол-во занятых мест
 
-    public FlightModel(int id, String date, String time, String dispatchLocation, String destination, int seatsNumber, int seatsLeft) {
+    public FlightModel(int id, LocalDateTime dateTime, String dispatchLocation, String destination, int seatsNumber, int seatsLeft) {
         this.id = id;
-        this.date = date;
-        this.time = time;
+        this.dateTime = dateTime;
         this.dispatchLocation = dispatchLocation;
         this.destination = destination;
         this.seatsNumber = seatsNumber;
@@ -27,12 +26,8 @@ public class FlightModel implements Serializable {
         return id;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public String getTime() {
-        return time;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
     public String getDispatchLocation() {
@@ -54,8 +49,7 @@ public class FlightModel implements Serializable {
     @Override
     public String toString() {
         return id +
-                "\t\t\t\t" + date +
-                "\t\t\t\t" + time +
+                "\t\t\t\t" + dateTime +
                 "\t\t\t\t" + dispatchLocation +
                 "\t\t\t\t" + destination +
                 "\t\t\t\t" + seatsNumber +
@@ -68,13 +62,13 @@ public class FlightModel implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         FlightModel that = (FlightModel) o;
         return id == that.id &&
-                Objects.equals(date, that.date) &&
+                Objects.equals(dateTime, that.dateTime) &&
                 Objects.equals(destination, that.destination) &&
                 Objects.equals(seatsNumber, that.seatsNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, destination, seatsNumber);
+        return Objects.hash(dateTime, destination, seatsNumber);
     }
 }

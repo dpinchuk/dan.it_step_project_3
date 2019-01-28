@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
+/**
+ * Class implements interface BookingDAO
+ *
+ * @author Pinchuk Dmitry
+ */
 public class BookingDAOImpl implements BookingDAO {
 
     private List<BookingModel> bookingList = new ArrayList<>();
@@ -21,30 +26,17 @@ public class BookingDAOImpl implements BookingDAO {
 
     @Override
     public boolean deleteBookingById(int id) {
-        try {
-            return this.bookingList.remove(this.bookingList
-                    .stream()
-                    .filter(e ->
-                            e.getId() == id)
-                    .findFirst()
-                    .get());
-        } catch (NoSuchElementException e) {
-        }
-        return false;
+        return this.bookingList.removeIf(b -> b.getId() == id);
     }
 
     @Override
     public BookingModel getBookingById(int id) {
-        try {
-            return this.bookingList
-                    .stream()
-                    .filter(e ->
-                            e.getId() == id)
-                    .findFirst()
-                    .get();
-        } catch (NoSuchElementException e) {
-            return null;
-        }
+        return this.bookingList
+                .stream()
+                .filter(e ->
+                        e.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -63,8 +55,13 @@ public class BookingDAOImpl implements BookingDAO {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Getter
+     *
+     * @return this.bookingList
+     */
     public List<BookingModel> getBookingModelList() {
-        return bookingList;
+        return this.bookingList;
     }
 
 }

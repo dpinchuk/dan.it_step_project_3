@@ -3,8 +3,8 @@ Date        Time   From      To           Seats  Occupied
 2019-01-28  03:05  Kiev      Hurghada      99      99
 2019-01-28  12:20  Kiev      Berlin       90      99
 2019-01-28  12:45  Kiev      London       70      70
-2019-01-28  23:15  Berlin    Madrid      100     100
-2019-01-29  00:30  Kiev      Rome        100     100
+2019-01-28  22:15  Berlin    Madrid      100     100
+2019-01-29  22:30  Kiev      Rome        100     100
 2019-01-29  05:30  Kiev      Rome        100     100
 2019-01-29  10:30  Kiev      Rome        100     100
 2019-01-29  01:05  Kiev      Vilnius     100     100

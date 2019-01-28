@@ -6,6 +6,7 @@ import models.UserModel;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +28,23 @@ public class Loader {
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_FLIGHTS_TO));
         for (String str : flightList) {
             String[] s = str.split("\\s+");
-            objectOutputStream.writeObject(new FlightModel(++this.countFlights, s[0], s[1], s[2], s[3], Integer.parseInt(s[4]), Integer.parseInt(s[5])));
+            String[] date = s[0].split("-"); //TODO
+            String[] time = s[1].split(":"); //TODO
+
+            FlightModel flight = new FlightModel(
+                    ++this.countFlights,
+                    LocalDateTime.of(
+                            Integer.parseInt(date[0]),
+                            Integer.parseInt(date[1]),
+                            Integer.parseInt(date[2]),
+                            Integer.parseInt(time[0]),
+                            Integer.parseInt(time[1])
+                    ),
+                    s[2],
+                    s[3],
+                    Integer.parseInt(s[4]),
+                    Integer.parseInt(s[5]));
+            objectOutputStream.writeObject(flight);
         }
         objectOutputStream.close();
     }

@@ -94,7 +94,7 @@ public class ViewConsole {
      */
     private void actionOnlineScoreboard() {
         System.out.println("\n\n[Information on all flights from Kiev in the next {" + getHoursFromMilli(DIFFERENCE) + "} hours]");
-        List<FlightModel> flightsListNextHours = this.flightController.getFlightService().getFlightsListNextHours(DIFFERENCE);
+        List<FlightModel> flightsListNextHours = this.flightController.getFlightsListNextHours(DIFFERENCE);
         printFlightList(flightsListNextHours);
     }
 
@@ -103,7 +103,7 @@ public class ViewConsole {
      */
     private void actionViewFlightInfo() {
         System.out.println("\n\n[View flight information]");
-        System.out.println("Flight [id] must be between [1] and [" + this.flightController.getFlightService().getFlightDAO().getFlightList().size() + "]!");
+        System.out.println("Flight [id] must be between [1] and [" + this.flightController.getFlightListSize() + "]!");
         String id = "";
         System.out.print("Input Flight [id]: ");
         try {
@@ -112,7 +112,7 @@ public class ViewConsole {
             e.printStackTrace();
         }
         if (convertId(id) > 0) {
-            printObject(this.flightController.getFlightService().getFlightInfo(convertId(id)));
+            printObject(this.flightController.getFlightInfo(convertId(id)));
         }
     }
 
@@ -137,7 +137,7 @@ public class ViewConsole {
                     System.out.print("Input number of tickets: ");
                     try {
                         ticketsNumber = this.reader.readLine();
-                        List<FlightModel> listFlights = this.flightController.getFlightService().getFlightDAO().getFlightByData(destination, date, getNumberFromString(ticketsNumber));
+                        List<FlightModel> listFlights = this.flightController.getFlightByData(destination, date, getNumberFromString(ticketsNumber));
                         printFlightList(listFlights);
                         if (listFlights.size() > 0) {
                             int flightIdSelect = 0;
@@ -155,7 +155,7 @@ public class ViewConsole {
                                         int[] updateFlightData = {flightIdSelect, Integer.parseInt(ticketsNumber)};
                                         int booking = bookingFlight(updateFlightData);
                                         if (booking > 0) {
-                                            this.flightController.getFlightService().getFlightDAO().updateFlightOccupiedPlaces(updateFlightData);
+                                            this.flightController.updateFlightOccupiedPlaces(updateFlightData);
                                             System.out.println(OPERATION_SUCCESS + " [" + booking + "]");
                                         } else {
                                             System.out.println(OPERATION_ERROR);
@@ -207,7 +207,7 @@ public class ViewConsole {
                         int flightPlaces = -this.bookingController.getBookingService().getBookingDAO().getBookingById(bookingId).getSeatsRemaining();
                         if (this.bookingController.getBookingService().getBookingDAO().deleteBookingById(bookingId)) {
                             int[] updateFlightData = {flightId, flightPlaces};
-                            this.flightController.getFlightService().getFlightDAO().updateFlightOccupiedPlaces(updateFlightData);
+                            this.flightController.updateFlightOccupiedPlaces(updateFlightData);
                             System.out.println(OPERATION_SUCCESS + " [" + bookingId + "]");
                         } else {
                             System.out.println(OPERATION_ERROR);
@@ -319,10 +319,10 @@ public class ViewConsole {
      * @param list as ArrayList<>(FlightModel)
      */
     private void printFlightList(List<FlightModel> list) {
-        if (list.size() == 0) {
-            System.out.println("\n\n" + SEARCH_NOTHING);
-        } else {
+        if (list.size() != 0) {
             list.forEach(System.out::println);
+        } else {
+            System.out.println("\n\n" + SEARCH_NOTHING);
         }
     }
 
@@ -365,11 +365,12 @@ public class ViewConsole {
         } catch (NumberFormatException e) {
             System.out.println("\n\n" + SEARCH_NOTHING);
         }
-        if (id >= 0 && id < this.flightController.getFlightService().getFlightDAO().getFlightList().size()) {
+        int boundary = this.flightController.getFlightListSize();
+        if (id >= 0 && id < boundary) {
             return id;
         }
         System.out.println(INVALID_DATA);
-        System.out.println("id must be between [1] and [" + this.flightController.getFlightService().getFlightDAO().getFlightList().size() + "]!");
+        System.out.println("id must be between [1] and [" + boundary + "]!");
         return 0;
     }
 

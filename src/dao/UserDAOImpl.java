@@ -19,11 +19,6 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<UserModel> getUserList() {
-        return this.userList;
-    }
-
-    @Override
     public UserModel getUserById(int id) {
         try {
             return this.userList
@@ -64,6 +59,10 @@ public class UserDAOImpl implements UserDAO {
         } catch (NoSuchElementException e) {
         }
         return null;
+    }
+
+    public List<UserModel> getUserList() {
+        return this.userList;
     }
 
 }

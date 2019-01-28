@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface BookingService {
 
-    String getBookingInfo(int id); //получаем информацию о забронированно рейсе по id
+    String getBookingInfo(int id); //РїРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ Р·Р°Р±СЂРѕРЅРёСЂРѕРІР°РЅРЅРѕ СЂРµР№СЃРµ РїРѕ id
 
-    boolean isBookingExist(int id); //проверяет существование бронированного рейса по id
+    boolean isBookingExist(int id); //РїСЂРѕРІРµСЂСЏРµС‚ СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёРµ Р±СЂРѕРЅРёСЂРѕРІР°РЅРЅРѕРіРѕ СЂРµР№СЃР° РїРѕ id
 
 }
