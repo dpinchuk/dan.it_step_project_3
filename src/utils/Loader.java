@@ -4,68 +4,96 @@ import models.FlightModel;
 import models.UserModel;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Random;
 
 import static utils.Constants.*;
 
+/**
+ * Loader class for io working
+ * @author Pinchuk Dmitry
+ */
 public class Loader {
 
     private int countFlights = 0;
     private int countUsers = 0;
 
-    private void setFlightsFromListToFile() throws Exception {
-        Files.deleteIfExists(Paths.get(DATA_FILE_FLIGHTS_TO));
-        Files.createFile(Paths.get(DATA_FILE_FLIGHTS_TO));
-        List<String> flightList = Files.lines(Paths.get(DATA_FILE_FLIGHTS_FROM))
-                .skip(1)
-                .filter(e-> !e.trim().isEmpty())
-                .collect(Collectors.toList());
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_FLIGHTS_TO));
-        for (String str : flightList) {
-            String[] s = str.split("\\s+");
-            String[] date = s[0].split("-"); //TODO
-            String[] time = s[1].split(":"); //TODO
+    public List<FlightModel> getFlightModelList() throws Exception {
+        return getFlightsToList();
+    }
 
-            FlightModel flight = new FlightModel(
+    public List<UserModel> getUserModelList() throws Exception {
+        return getUsersToList();
+    }
+
+    /**
+     * Generates flight objects and writes into file
+     * @throws Exception IOException
+     */
+    private void setFlightsToList() {
+        ObjectOutputStream objectOutputStream = null;
+        try {
+            objectOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_FLIGHTS_TO));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int hours = 0;
+        int minutes = 0;
+        FlightModel flight;
+        LocalDateTime dateTime;
+        int seats = 0;
+        int index = 0;
+        for (int i = 0; i < FLIGHTS_LIMIT; i++) {
+            dateTime = LocalDateTime.parse(LocalDateTime.now().plusHours(0).plusMinutes(minutes).format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)), DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
+            seats = new Random().ints(50, (100)).limit(1).findFirst().getAsInt();
+            index = new Random().ints(0, DIRECTIONS.length).limit(1).findFirst().getAsInt();
+            flight = new FlightModel(
                     ++this.countFlights,
-                    LocalDateTime.of(
-                            Integer.parseInt(date[0]),
-                            Integer.parseInt(date[1]),
-                            Integer.parseInt(date[2]),
-                            Integer.parseInt(time[0]),
-                            Integer.parseInt(time[1])
-                    ),
-                    s[2],
-                    s[3],
-                    Integer.parseInt(s[4]),
-                    Integer.parseInt(s[5]));
-            objectOutputStream.writeObject(flight);
+                    dateTime,
+                    KIEV,
+                    DIRECTIONS[index],
+                    seats
+            );
+            try {
+                objectOutputStream.writeObject(flight);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //hours++;
+            minutes += 30;
         }
-        objectOutputStream.close();
+        try {
+            objectOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * Generates user objects and writes into file
+     * @throws Exception
+     */
     private void setUsersFromListToFile() throws Exception {
-        Files.deleteIfExists(Paths.get(DATA_FILE_USERS_TO));
-        Files.createFile(Paths.get(DATA_FILE_USERS_TO));
-        List<String> userList = Files.lines(Paths.get(DATA_FILE_USERS_FROM))
-                .skip(1)
-                .filter(e-> !e.trim().isEmpty())
-                .collect(Collectors.toList());
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_USERS_TO));
-        for (String str : userList) {
-            String[] s = str.split("\\s+");
-            objectOutputStream.writeObject(new UserModel(++this.countUsers, s[0], s[1]));
+        UserModel userModel;
+        for (String user : USER_LIST) {
+            String[] s = user.split("\\s+");
+            userModel = new UserModel(++this.countUsers, s[0], s[1], s[2], s[3]);
+            objectOutputStream.writeObject(userModel);
         }
         objectOutputStream.close();
     }
 
-    private List<FlightModel> getFlightsFromFileToList() throws Exception {
-        setFlightsFromListToFile();
+    /**
+     *
+     * @return
+     * @throws Exception
+     */
+    private List<FlightModel> getFlightsToList() throws Exception {
+        setFlightsToList();
         ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(DATA_FILE_FLIGHTS_TO));
         List<FlightModel> flightModelList = new ArrayList<>();
         for (int i = 0; i < this.countFlights; i++) {
@@ -75,7 +103,7 @@ public class Loader {
         return flightModelList;
     }
 
-    private List<UserModel> getUsersFromFileToList() throws Exception {
+    private List<UserModel> getUsersToList() throws Exception {
         setUsersFromListToFile();
         ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(DATA_FILE_USERS_TO));
         List<UserModel> userModelList = new ArrayList<>();
@@ -84,14 +112,6 @@ public class Loader {
         }
         objectInputStream.close();
         return userModelList;
-    }
-
-    public List<FlightModel> getFlightModelList() throws Exception {
-        return getFlightsFromFileToList();
-    }
-
-    public List<UserModel> getUserModelList() throws Exception {
-        return getUsersFromFileToList();
     }
 
 }

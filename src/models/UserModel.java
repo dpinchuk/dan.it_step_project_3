@@ -3,16 +3,25 @@ package models;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Model class of users
+ *
+ * @author Pinchuk Dmitry
+ */
 public class UserModel implements Serializable {
 
     private int id;
     private String login;
     private String password;
+    private String userName;
+    private String userSurname;
 
-    public UserModel(int id, String login, String password) {
+    public UserModel(int id, String login, String password, String userName, String userSurname) {
         this.id = id;
         this.login = login;
         this.password = password;
+        this.userName = userName;
+        this.userSurname = userSurname;
     }
 
     public int getId() {
@@ -27,16 +36,19 @@ public class UserModel implements Serializable {
         return password;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getUserSurname() {
+        return userSurname;
     }
 
     @Override
     public String toString() {
-        return id +
-                "\t\t\t\t" + login +
-                "\t\t\t\t" + password +
-                "\t\t\t\t" + this.hashCode();
+        return "\t\t" + id +
+                "\t\t" + userName +
+                "\t\t" + userSurname;
     }
 
     @Override
@@ -44,12 +56,11 @@ public class UserModel implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserModel userModel = (UserModel) o;
-        return Objects.equals(login, userModel.login);
+        return id == userModel.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(login);
+        return Objects.hash(id, userName, userSurname);
     }
-
 }

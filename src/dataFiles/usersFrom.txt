@@ -1,8 +1,0 @@
-login        password
-ivanoff.ii   111111
-petrov.pp    222222
-sidoroff.ss  333333
-smirnoff.ff  444444
-sukin.mm     555555
-pinchuk.da   111111
-dima1978     111278

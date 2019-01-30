@@ -3,56 +3,41 @@ package models;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Model class of bookings
+ *
+ * @author Pinchuk Dmitry
+ */
 public class BookingModel implements Serializable {
 
     private int id; //id бронирования рейса
-    private int flightId; //id рейса
-    private String name; //имя пассажира
-    private String surname; //фамилия пассажира
-    private int seatsRemaining; //количество оставшихся мест
-    private int userHash; //принадлежность конкретному пользователю
+    private FlightModel flight; //рейс
+    private UserModel user; //пользователь
 
-    public BookingModel(int id, int flightId, String name, String surname, int seatsRemaining, int userHash) {
+    public BookingModel(int id, FlightModel flight, UserModel user) {
         this.id = id;
-        this.flightId = flightId;
-        this.name = name;
-        this.surname = surname;
-        this.seatsRemaining = seatsRemaining;
-        this.userHash = userHash;
+        this.flight = flight;
+        this.user = user;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getFlightId() {
-        return flightId;
+    public FlightModel getFlight() {
+        return flight;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public int getSeatsRemaining() {
-        return seatsRemaining;
-    }
-
-    public int getUserHash() {
-        return userHash;
+    public UserModel getUser() {
+        return user;
     }
 
     @Override
     public String toString() {
         return id +
-                "\t\t\t\t" + flightId +
-                "\t\t\t\t" + name +
-                "\t\t\t\t" + surname +
-                "\t\t\t\t" + seatsRemaining +
-                "\t\t\t\t" + userHash;
+                "\t\t" + flight +
+                "\t\t" + user.getUserName() +
+                "\t\t" + user.getUserSurname();
     }
 
     @Override
@@ -60,14 +45,12 @@ public class BookingModel implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BookingModel that = (BookingModel) o;
-        return userHash == that.userHash &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(surname, that.surname);
+        return id == that.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, surname, userHash);
+        return Objects.hash(id);
     }
 
 }

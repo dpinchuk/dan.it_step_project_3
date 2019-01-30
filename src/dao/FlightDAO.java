@@ -2,16 +2,19 @@ package dao;
 
 import models.FlightModel;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
  * Interface for FlightDAOImpl
+ *
  * @author Pinchuk Dmitry
  */
 public interface FlightDAO {
 
     /**
      * Return flight by [id]
+     *
      * @param id int
      * @return FlightModel
      */
@@ -19,20 +22,28 @@ public interface FlightDAO {
 
     /**
      * Return List<FlightModel> by destination, date, seatsNumber
+     *
      * @param destination String
-     * @param dateMilli long
+     * @param date        LocalDate
      * @param seatsNumber int
      * @return List<FlightModel>
      */
-    List<FlightModel> getFlightByData(String destination, long dateMilli, int seatsNumber); //находит рейсы по указанным данным
+    List<FlightModel> getFlightByData(String destination, LocalDate date, int seatsNumber); //находит рейсы по указанным данным (направление, дата, количество мест)
 
     /**
-     * Updates flight if booking was made
-     * @param flightIdAndNumberPlaces boolean
-     * @return boolean true/false
+     * @param flight FlightModel
+     * @param place  int
      */
-    boolean updateFlightOccupiedPlaces(int[] flightIdAndNumberPlaces); //изменяет количество занятых мест рейса
+    void updateFlight(FlightModel flight, int place); //изменяет количество занятых мест рейса на +-1
 
-    List<FlightModel> getFlightsListNextHours(long milliCurent, long milliFlight);
+    /**
+     * Returns the list of flights for the specified time
+     *
+     * @param milliCurrent long
+     * @param milliFlight  long
+     * @return List<FlightModel>
+     */
+    List<FlightModel> getFlightsDuringTime(long milliCurrent, long milliFlight); //возвращает список рейсов в ближайшее время {24 часа по дефолту}
 
+    boolean isFlightExist(FlightModel flight);
 }

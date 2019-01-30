@@ -1,7 +1,14 @@
 package services;
 
+import java.util.regex.Pattern;
+
 import static utils.Constants.DATE_FORMAT_REGEX;
 
+/**
+ * Main class for services
+ *
+ * @author Pinchuk Dmitry
+ */
 public class MainService {
 
     public boolean isValidNumber(int number) {
@@ -19,8 +26,8 @@ public class MainService {
         return false;
     }
 
-    public boolean isValidDate(String date) {
-        return date.matches(DATE_FORMAT_REGEX);
+    private boolean isDateValid(String date) {
+        return Pattern.compile(DATE_FORMAT_REGEX).matcher(date).matches();
     }
 
 }

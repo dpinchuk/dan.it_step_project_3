@@ -4,8 +4,12 @@ import models.UserModel;
 import utils.Loader;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
+/**
+ * DAO class implements interface UserDAO
+ *
+ * @author Pinchuk Dmitry
+ */
 public class UserDAOImpl implements UserDAO {
 
     private List<UserModel> userList;
@@ -18,49 +22,60 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    /**
+     * Implements UserModel getUserById(int id)
+     *
+     * @param id int
+     * @return UserModel
+     */
     @Override
     public UserModel getUserById(int id) {
-        try {
-            return this.userList
-                    .stream()
-                    .filter(e ->
-                            e.getId() == id)
-                    .findFirst()
-                    .get();
-        } catch (NoSuchElementException e) {
-        }
-        return null;
+        return this.userList
+                .stream()
+                .filter(e ->
+                        e.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
+    /**
+     * Implements
+     *
+     * @param login    String
+     * @param password String
+     * @return UserModel
+     */
     @Override
-    public UserModel getUserByLogin(String login) {
-        try {
-            return this.userList
-                    .stream()
-                    .filter(e ->
-                            e.getLogin() == login)
-                    .findFirst()
-                    .get();
-        } catch (NoSuchElementException e) {
-        }
-        return null;
+    public UserModel getUserByLoginAndPassword(String login, String password) {
+        return this.userList
+                .stream()
+                .filter(e ->
+                        (e.getLogin().equals(login) &&
+                                e.getPassword().equals(password)))
+                .findFirst()
+                .orElse(null);
     }
 
+    /**
+     * Returns user by [sessionId]
+     *
+     * @param sessionId int
+     * @return UserModel
+     */
     @Override
-    public UserModel getUserByLoginAndPassword(String[] userLoginAndPassword) {
-        try {
-            return this.userList
-                    .stream()
-                    .filter(e ->
-                            (e.getLogin().equals(userLoginAndPassword[0]) &&
-                                    e.getPassword().equals(userLoginAndPassword[1])))
-                    .findFirst()
-                    .get();
-        } catch (NoSuchElementException e) {
-        }
-        return null;
+    public UserModel getUserBySessionId(int sessionId) {
+        return this.userList
+                .stream()
+                .filter(e -> e.hashCode() == sessionId)
+                .findFirst()
+                .orElse(null);
     }
 
+    /**
+     * Returns user list
+     *
+     * @return List<UserModel>
+     */
     public List<UserModel> getUserList() {
         return this.userList;
     }

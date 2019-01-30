@@ -1,28 +1,30 @@
 package dao;
 
 import models.BookingModel;
+import models.FlightModel;
+import models.UserModel;
 
 import java.util.List;
 
 /**
  * Interface for BookingDAOImpl
+ *
  * @author Pinchuk Dmitry
  */
 public interface BookingDAO {
 
     /**
      * Creates new booking
-     * @param flightId int
-     * @param name String
-     * @param surname String
-     * @param seatsNumber int
-     * @param userHash int
-     * @return id booking (int)
+     *
+     * @param flight FlightModel
+     * @param user   UserModel
+     * @return int [id]
      */
-    int createBooking(int flightId, String name, String surname, int seatsNumber, int userHash); //создает бронированный рейс
+    int createBooking(FlightModel flight, UserModel user); //создает бронированныйие рейса
 
     /**
      * Delete existing booking
+     *
      * @param id int
      * @return is deleting true/false
      */
@@ -30,6 +32,7 @@ public interface BookingDAO {
 
     /**
      * Return booking by [id]
+     *
      * @param id int
      * @return object BookingModel
      */
@@ -37,16 +40,17 @@ public interface BookingDAO {
 
     /**
      * Return List<BookingModel> by user's name and surname
-     * @param name String
-     * @param surname String
+     *
+     * @param user UserModel
      * @return List<BookingModel>
      */
-    List<BookingModel> getUserBookings(String name, String surname); //получаем список забронированных рейсов юзера //TODO
+    List<BookingModel> getUserBookings(UserModel user); //получаем список забронированных рейсов юзера
 
     /**
      * Return List<BookingModel> by sessionId (for authorized users only)
-     * @param sessionId
-     * @return
+     *
+     * @param sessionId int
+     * @return List<BookingModel>
      */
     List<BookingModel> getUserBookings(int sessionId); //получаем список забронированных рейсов авторизованного юзера
 

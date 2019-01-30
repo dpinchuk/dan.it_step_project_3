@@ -2,23 +2,36 @@ package dao;
 
 import models.UserModel;
 
-import java.util.List;
-
 /**
  * Interface for UserDAOImpl
+ *
  * @author Pinchuk Dmitry
  */
 public interface UserDAO {
 
     /**
+     * Returns user by [id]
      *
-     * @param id
+     * @param id int
      * @return
      */
-    UserModel getUserById(int id);
+    UserModel getUserById(int id); //возвращает user по [id]
 
-    UserModel getUserByLogin(String login);
+    /**
+     * Returns user by [login, password]
+     *
+     * @param login
+     * @param password
+     * @return
+     */
+    UserModel getUserByLoginAndPassword(String login, String password); //возвращает user по [login, password]
 
-    UserModel getUserByLoginAndPassword(String[] userLoginAndPassword);
+    /**
+     * Returns user by [sessionId]
+     *
+     * @param sessionId int
+     * @return UserModel
+     */
+    UserModel getUserBySessionId(int sessionId);
 
 }

@@ -3,14 +3,17 @@ package dao;
 import models.FlightModel;
 import utils.Loader;
 
-import java.time.ZoneOffset;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalInt;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
+import static utils.Constants.*;
 
 /**
- * Class implements interface FlightDAO
+ * DAO class implements interface FlightDAO
  *
  * @author Pinchuk Dmitry
  */
@@ -18,14 +21,23 @@ public class FlightDAOImpl implements FlightDAO {
 
     private List<FlightModel> flightList;
 
+    /**
+     * Constructor
+     */
     public FlightDAOImpl() {
         try {
             this.flightList = new Loader().getFlightModelList();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(INVALID_DATA);
         }
     }
 
+    /**
+     * Implements FlightModel getFlightById(int id)
+     *
+     * @param id int
+     * @return FlightModel
+     */
     @Override
     public FlightModel getFlightById(int id) {
         return this.flightList.stream()
@@ -34,54 +46,78 @@ public class FlightDAOImpl implements FlightDAO {
                 .orElse(null);
     }
 
+    /**
+     * Implements List<FlightModel> getFlightByData(String destination, LocalDate date, int seatsNumber)
+     *
+     * @param destination String
+     * @param date        LocalDate
+     * @param seatsNumber int
+     * @return List<FlightModel>
+     */
     @Override
-    public List<FlightModel> getFlightByData(String destination, long dateMilli, int seatsNumber) {
+    public List<FlightModel> getFlightByData(String destination, LocalDate date, int seatsNumber) {
+        return this.flightList
+                .stream()
+                .filter(e -> e.getDestination().toLowerCase().equals(destination.toLowerCase()) &&
+                        e.getDateTime().toLocalDate().equals(date) &&
+                        e.getSeatsRemaining() >= seatsNumber)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Implements boolean updateFlight(FlightModel flight, int place)
+     *
+     * @param flight FlightModel
+     * @param place  int
+     */
+    @Override
+    public void updateFlight(FlightModel flight, int place) {
+        FlightModel flightModel = this.flightList
+                .stream()
+                .filter(e -> e.getId() == flight.getId())
+                .findFirst()
+                .orElse(null);
+        if (flightModel != null) {
+            this.flightList.remove(flightModel);
+            int seatsRemaining = flightModel.getSeatsRemaining() + place;
+            flightModel.setSeatsRemaining(seatsRemaining);
+            this.flightList.add(flightModel);
+        } else {
+            System.out.println(OPERATION_ERROR);
+        }
+    }
+
+    /**
+     * Implements List<FlightModel> getFlightsDuringTime(long milliCurrent, long milliFlight)
+     *
+     * @param milliCurrent long
+     * @param milliFlight  long
+     * @return List<FlightModel>
+     */
+    @Override
+    public List<FlightModel> getFlightsDuringTime(long milliCurrent, long milliFlight) {
         return this.flightList
                 .stream()
                 .filter(e ->
-                        e.getDestination().toLowerCase().equals(destination.toLowerCase()) &&
-                                e.getDateTime().toInstant(ZoneOffset.ofTotalSeconds(0)).toEpochMilli() == dateMilli &&
-                                (e.getSeatsLeft()) >= seatsNumber)
+                        (e.getDateTime().atZone(ZoneId.of(TIME_ZONE)).toInstant().toEpochMilli() - milliCurrent <= milliFlight) &&
+                                e.getDateTime().atZone(ZoneId.of(TIME_ZONE)).toInstant().toEpochMilli() - milliCurrent >= 0)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public boolean updateFlightOccupiedPlaces(int[] flightIdAndNumberPlaces) {
-        OptionalInt indexOpt = IntStream.range(0, this.flightList.size())
-                .filter(i -> flightIdAndNumberPlaces[0] == this.flightList.get(i).getId())
-                .findFirst();
-        int index = 0;
-        if (indexOpt.isPresent()) {
-            index = indexOpt.getAsInt();
-        }
-        FlightModel flightModel = new FlightModel(
-                this.flightList.get(index).getId(),
-                this.flightList.get(index).getDateTime(),
-                this.flightList.get(index).getDispatchLocation(),
-                this.flightList.get(index).getDestination(),
-                this.flightList.get(index).getSeatsNumber(),
-                this.flightList.get(index).getSeatsLeft() - flightIdAndNumberPlaces[1]);
-        this.flightList.remove(index);
-        this.flightList.add(index, flightModel);
-        return this.flightList.contains(flightModel);
-    }
-
-    @Override
-    public List<FlightModel> getFlightsListNextHours(long milliCurent, long milliFlight) {
-
-        for (FlightModel flight : this.flightList) {
-            boolean bool = flight.getDateTime().toInstant(ZoneOffset.ofTotalSeconds(0)).toEpochMilli() - milliCurent <= milliFlight;
-            System.out.println(bool);
-        }
-
+    public boolean isFlightExist(FlightModel flight) {
         return this.flightList
                 .stream()
-                .filter(e ->
-                        (e.getDateTime().toInstant(ZoneOffset.ofTotalSeconds(0)).toEpochMilli() - milliCurent <= milliFlight))
-                .collect(Collectors.toList());
+                .anyMatch(e -> e.equals(flight));
     }
 
+    /**
+     * Returns a size of flights collection
+     *
+     * @return int
+     */
     public int getFlightListSize() {
         return this.flightList.size();
     }
+
 }
