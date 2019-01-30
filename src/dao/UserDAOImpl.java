@@ -3,6 +3,7 @@ package dao;
 import models.UserModel;
 import utils.Loader;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -72,12 +73,28 @@ public class UserDAOImpl implements UserDAO {
     }
 
     /**
-     * Returns user list
-     *
-     * @return List<UserModel>
+     * Returns user by login [Only for check during registration!]
+     * @param login String
+     * @return UserModel
      */
-    public List<UserModel> getUserList() {
-        return this.userList;
+    @Override
+    public UserModel getUserByLogin(String login) {
+        return this.userList
+                .stream()
+                .filter(e -> e.getLogin().equals(login))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public UserModel createUser(String login, String password, String userName, String userSurname) {
+        UserModel userModel = this.userList
+                .stream()
+                .max(Comparator.comparing(UserModel::getId))
+                .get();
+        UserModel newUser = new UserModel(userModel.getId() + 1, login, password, userName, userSurname);
+        this.userList.add(newUser);
+        return newUser;
     }
 
 }

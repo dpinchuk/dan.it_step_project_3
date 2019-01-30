@@ -34,4 +34,21 @@ public interface UserDAO {
      */
     UserModel getUserBySessionId(int sessionId);
 
+    /**
+     * Returns user by login [Only for check during registration!]
+     * @param login String
+     * @return UserModel
+     */
+    UserModel getUserByLogin(String login);
+
+    /**
+     * Creates new user
+     *
+     * @param login       String
+     * @param password    String
+     * @param userName    String
+     * @param userSurname String
+     * @return UserModel
+     */
+    UserModel createUser(String login, String password, String userName, String userSurname);
 }

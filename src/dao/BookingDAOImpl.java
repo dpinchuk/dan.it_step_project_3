@@ -26,10 +26,10 @@ public class BookingDAOImpl implements BookingDAO {
      * @return int
      */
     @Override
-    public int createBooking(FlightModel flight, UserModel user) {
+    public BookingModel createBooking(FlightModel flight, UserModel user) {
         BookingModel bookingModel = new BookingModel(++bookingId, flight, user);
         this.bookingList.add(bookingModel);
-        return bookingModel.getId();
+        return bookingModel;
     }
 
     /**

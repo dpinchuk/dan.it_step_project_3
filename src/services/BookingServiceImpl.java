@@ -56,11 +56,11 @@ public class BookingServiceImpl extends MainService implements BookingService {
     /**
      * Returns all user bookings [user must be authorized]
      *
-     * @param sessionId int
+     * @param user UserModel
      * @return List<BookingModel>
      */
-    public List<BookingModel> getUserBookings(int sessionId) {
-        return this.bookingDAO.getUserBookings(sessionId);
+    public List<BookingModel> getUserBookings(UserModel user) {
+        return this.bookingDAO.getUserBookings(user);
     }
 
     /**
@@ -70,11 +70,11 @@ public class BookingServiceImpl extends MainService implements BookingService {
      * @param user   UserModel
      * @return int
      */
-    public int createBooking(FlightModel flight, UserModel user) {
+    public BookingModel createBooking(FlightModel flight, UserModel user) {
         if (flight != null && user != null) {
             return this.bookingDAO.createBooking(flight, user);
         }
-        return 0;
+        return null;
     }
 
     /**

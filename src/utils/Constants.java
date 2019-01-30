@@ -18,7 +18,9 @@ public interface Constants {
 
     String DATE_FORMAT_REGEX = "^((?:(?:1[6-9]|2[0-9])\\d{2})(-)(?:(?:(?:0[13578]|1[02])(-)31)|((0[1,3-9]|1[0-2])(-)(29|30))))$|^(?:(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(-)02(-)29)$|^(?:(?:1[6-9]|2[0-9])\\d{2})(-)(?:(?:0[1-9])|(?:1[0-2]))(-)(?:0[1-9]|1\\d|2[0-8])$";
 
-    String SEARCH_NOTHING = "Search did not return results!";
+    String SEARCH_FALSE = "Search did not return results!";
+
+    String SEARCH_TRUE = "Ssearch returned the following results:";
 
     String INVALID_DATA = "Invalid data!";
 
@@ -36,12 +38,16 @@ public interface Constants {
 
     String ERROR_AUTHORIZATION_USER_IS_ALREADY_AUTHORIZED = "Error authorization: [User is already authorized!]";
 
-    int FLIGHTS_LIMIT = 5;
+    String ERROR_REGISTRATION_INVALID_INPUT_DATA = "Error registration: [Invalid input data!]";
+
+    String ERROR_REGISTRATION_USER_IS_ALREADY_REGISTERED = "Error registration: [User is already registered!]";
+
+    int FLIGHTS_LIMIT = 50;
 
     String KIEV = "Kiev";
 
-    String[] DIRECTIONS = {"Rome", "Gent"};
-    String[] DIRECTIONS_ = {
+    //String[] DIRECTIONS = {"Rome", "Gent"};
+    String[] DIRECTIONS = {
             "Minsk",
             "Grodno",
             "Moscow",

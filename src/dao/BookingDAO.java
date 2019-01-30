@@ -18,9 +18,9 @@ public interface BookingDAO {
      *
      * @param flight FlightModel
      * @param user   UserModel
-     * @return int [id]
+     * @return BookingModel
      */
-    int createBooking(FlightModel flight, UserModel user); //создает бронированныйие рейса
+    BookingModel createBooking(FlightModel flight, UserModel user); //создает бронированныйие рейса
 
     /**
      * Delete existing booking

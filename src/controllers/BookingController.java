@@ -19,15 +19,15 @@ public class BookingController {
         return this.bookingService.getBookingModelList();
     }
 
-    public List<BookingModel> getUserBookings(int sessionId) {
-        return this.bookingService.getUserBookings(sessionId);
+    public List<BookingModel> getUserBookings(UserModel user) {
+        return this.bookingService.getUserBookings(user);
     }
 
     public boolean isBookingExist(int bookingId) {
         return this.bookingService.isBookingExist(bookingId);
     }
 
-    public int createBooking(FlightModel flight, UserModel user) {
+    public BookingModel createBooking(FlightModel flight, UserModel user) {
         return this.bookingService.createBooking(flight, user);
     }
 
