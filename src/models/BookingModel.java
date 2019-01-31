@@ -35,7 +35,10 @@ public class BookingModel implements Serializable {
     @Override
     public String toString() {
         return id +
-                "\t\t" + flight +
+                "\t\t" + flight.getId() +
+                "\t\t" + flight.getDateTime() +
+                "\t\t" + flight.getDispatchLocation() +
+                "\t\t" + flight.getDestination() +
                 "\t\t" + user.getUserName() +
                 "\t\t" + user.getUserSurname();
     }

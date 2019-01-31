@@ -134,6 +134,7 @@ public class ViewConsole {
                             if (flight != null) {
                                 for (int i = 0; i < ticketsNumber; i++) {
                                     this.booking = this.bookingController.createBooking(flight, this.userController.getUserBySessionId(this.sessionId));
+                                    this.flightController.updateFlight(flight, -1);
                                     System.out.println("Created booking:\n" + booking);
                                 }
                             }

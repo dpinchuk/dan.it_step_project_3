@@ -37,6 +37,10 @@ public class FlightModel implements Serializable {
         return destination;
     }
 
+    public String getDispatchLocation() {
+        return dispatchLocation;
+    }
+
     public int getSeatsRemaining() {
         return seatsRemaining;
     }
