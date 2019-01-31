@@ -1,5 +1,7 @@
 package utils;
 
+import models.UserModel;
+
 public interface Constants {
 
     String EXIT = "0";
@@ -86,5 +88,7 @@ public interface Constants {
             "pinchuk.da   111111  Dmitry Pinchuk",
             "dmss111278   111278  Dmitry Pinchuk"
     };
+
+    UserModel GUEST = new UserModel(0, "guest", "guest", "Guest", "Guest");
 
 }

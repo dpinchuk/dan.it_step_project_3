@@ -29,7 +29,7 @@ public class ViewConsole {
     private BookingModel booking;
     private int sessionId = 0;
     //private int sessionId = 243444250;
-    private UserModel user = new UserModel(0, "guest", "guest", "Guest", "Guest");
+    private UserModel user = GUEST;
 
     /**
      * Main action list
@@ -124,7 +124,7 @@ public class ViewConsole {
                 String date = inputStringData("[2. Date must be in a format [YYYY-MM-DD]!]", "date");
                 //String date = "2019-01-30";
                 if (!date.equals("") && isDateValid(date)) {
-                    int ticketsNumber = inputIntData("[3. Number of tickets must be less than 100!]", "number of tickets");
+                    int ticketsNumber = inputIntData("[3. Number of tickets must be an integer!]", "number of tickets");
                     //int ticketsNumber = 10;
                     if (ticketsNumber > 0) {
                         List<FlightModel> listFlights = this.flightController.getFlightByData(destination, date, ticketsNumber);
@@ -235,7 +235,7 @@ public class ViewConsole {
         } else {
             System.out.println("[Log out user]");
             this.sessionId = 0;
-            this.user = null;
+            this.user = GUEST;
             System.out.println(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
         }
     }
