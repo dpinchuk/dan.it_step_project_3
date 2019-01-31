@@ -45,8 +45,8 @@ public class ViewConsole {
             System.out.println("[3] - Search flight by data and booking" + (this.sessionId != 0 ? " [Session id: " + this.sessionId + "]" : " [" + this.user.getUserName() + " " + this.user.getUserSurname() + "]"));
             System.out.println("[4] - Cancel booking" + (this.sessionId != 0 ? " [Session id: " + this.sessionId + "]" : " [" + this.user.getUserName() + " " + this.user.getUserSurname() + "]"));
             System.out.println("[5] - Show user flights " + (this.sessionId != 0 ? " [Session id: " + this.sessionId + "]" : " [" + this.user.getUserName() + " " + this.user.getUserSurname() + "]"));
-            System.out.println("[6] - " + (this.sessionId == 0 ? "Log in [" + this.user.getUserName() + " " + this.user.getUserSurname() + "]" : "Log out [Session id: " + this.sessionId + "]"));
-            System.out.println((this.sessionId == 0 ? "[7] - Registration [" + this.user.getUserName() + " " + this.user.getUserSurname() + "]" : ""));
+            System.out.println("[6] - " + (this.sessionId == 0 ? "Log in" : "Log out [Session id: " + this.sessionId + "]"));
+            System.out.println((this.sessionId == 0 ? "[7] - Registration" : ""));
             System.out.print("\nChoose your action: ");
             this.scanner = new Scanner(System.in);
             selectConsole = this.scanner.nextLine();

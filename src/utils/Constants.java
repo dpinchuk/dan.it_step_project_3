@@ -6,7 +6,11 @@ public interface Constants {
 
     String EXIT = "0";
 
+    String DATA_FILE_FLIGHTS = "src/dataFiles/flights.txt";
 
+    String DATA_FILE_BOOKINGS = "src/dataFiles/bookings.txt";
+
+    String DATA_FILE_USERS = "src/dataFiles/users.txt";
 
     int DIFFERENCE = 24 * 60 * 60 * 1000;
 
