@@ -34,4 +34,6 @@ public interface UserService {
 
     UserModel getUserByLogin(String login);
 
+    void writeUserListToFile();
+
 }

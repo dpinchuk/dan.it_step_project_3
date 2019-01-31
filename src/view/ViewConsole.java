@@ -52,6 +52,9 @@ public class ViewConsole {
             selectConsole = this.scanner.nextLine();
             if (selectConsole.equals(EXIT)) {
                 System.out.println("Thank you for using our service!");
+                this.userController.writeUserListToFile();
+                this.flightController.writeFlightListToFile();
+                this.bookingController.writeBookingListToFile();
                 break;
             } else {
                 select(selectConsole);

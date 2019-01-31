@@ -54,4 +54,6 @@ public interface BookingDAO {
      */
     List<BookingModel> getUserBookings(int sessionId); //получаем список забронированных рейсов авторизованного юзера
 
+    void writeBookingListToFile();
+
 }

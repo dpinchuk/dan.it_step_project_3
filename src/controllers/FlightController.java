@@ -83,4 +83,8 @@ public class FlightController {
         return this.flightService.getFlightById(flightId);
     }
 
+    public void writeFlightListToFile() {
+        this.flightService.writeFlightListToFile();
+    }
+
 }

@@ -10,4 +10,6 @@ public interface BookingService {
 
     boolean isBookingExist(int id); //проверяет существование бронированного рейса по [id]
 
+    void writeBookingListToFile();
+
 }

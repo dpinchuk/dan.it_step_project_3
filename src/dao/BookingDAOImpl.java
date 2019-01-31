@@ -18,11 +18,12 @@ import java.util.stream.Collectors;
 public class BookingDAOImpl implements BookingDAO {
 
     private List<BookingModel> bookingList = new ArrayList<>();
+    private Loader loader = new Loader();
     private int bookingId = 0;
 
     public BookingDAOImpl() {
         try {
-            this.bookingList = new Loader().readBookingListFromFile();
+            this.bookingList = loader.readBookingListFromFile();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -104,6 +105,11 @@ public class BookingDAOImpl implements BookingDAO {
      */
     public List<BookingModel> getBookingModelList() {
         return this.bookingList;
+    }
+
+    @Override
+    public void writeBookingListToFile() {
+        this.loader.writeBookingListToFile(this.bookingList);
     }
 
 }

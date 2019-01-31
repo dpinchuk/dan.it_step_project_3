@@ -15,10 +15,11 @@ import java.util.List;
 public class UserDAOImpl implements UserDAO {
 
     private List<UserModel> userList;
+    private Loader loader = new Loader();
 
     public UserDAOImpl() {
         try {
-            this.userList = new Loader().readUserListFromFile();
+            this.userList = this.loader.readUserListFromFile();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -102,6 +103,11 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<UserModel> getUserList() {
         return this.userList;
+    }
+
+    @Override
+    public void writeUserListToFile() {
+        this.loader.writeUserListToFile(this.userList);
     }
 
 }

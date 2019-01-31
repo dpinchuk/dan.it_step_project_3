@@ -96,4 +96,10 @@ public class BookingServiceImpl extends MainService implements BookingService {
     public boolean deleteBookingById(int id) {
         return this.bookingDAO.deleteBookingById(id);
     }
+
+    @Override
+    public void writeBookingListToFile() {
+        this.bookingDAO.writeBookingListToFile();
+    }
+
 }

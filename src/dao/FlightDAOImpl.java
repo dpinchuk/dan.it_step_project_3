@@ -6,9 +6,7 @@ import utils.Loader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static utils.Constants.*;
@@ -21,10 +19,11 @@ import static utils.Constants.*;
 public class FlightDAOImpl implements FlightDAO {
 
     private List<FlightModel> flightList;
+    private Loader loader = new Loader();
 
     public FlightDAOImpl() {
         try {
-            this.flightList = new Loader().readFlightListFromFile();
+            this.flightList = loader.readFlightListFromFile();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -116,6 +115,11 @@ public class FlightDAOImpl implements FlightDAO {
      */
     public int getFlightListSize() {
         return this.flightList.size();
+    }
+
+    @Override
+    public void writeFlightListToFile() {
+        this.loader.writeFlightListToFile(this.flightList);
     }
 
 }

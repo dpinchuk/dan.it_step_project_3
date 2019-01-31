@@ -38,4 +38,9 @@ public class BookingController {
     public boolean deleteBookingById(int id) {
         return this.bookingService.deleteBookingById(id);
     }
+
+    public void writeBookingListToFile() {
+        this.bookingService.writeBookingListToFile();
+    }
+
 }

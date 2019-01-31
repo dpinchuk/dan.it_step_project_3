@@ -28,4 +28,9 @@ public class UserController {
     public void createUser(String login, String password, String userName, String userSurname) {
         this.userService.createUser(login, password, userName, userSurname);
     }
+
+    public void writeUserListToFile() {
+        this.userService.writeUserListToFile();
+    }
+
 }

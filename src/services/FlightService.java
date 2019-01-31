@@ -21,4 +21,6 @@ public interface FlightService {
 
     public boolean isFlightExist(FlightModel flight);
 
+    void writeFlightListToFile();
+
 }

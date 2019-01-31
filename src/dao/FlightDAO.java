@@ -46,4 +46,7 @@ public interface FlightDAO {
     List<FlightModel> getFlightsDuringTime(long milliCurrent, long milliFlight); //возвращает список рейсов в ближайшее время {24 часа по дефолту}
 
     boolean isFlightExist(FlightModel flight);
+
+    void writeFlightListToFile();
+
 }

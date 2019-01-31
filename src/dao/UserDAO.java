@@ -55,4 +55,7 @@ public interface UserDAO {
     UserModel createUser(String login, String password, String userName, String userSurname);
 
     List<UserModel> getUserList();
+
+    void writeUserListToFile();
+
 }

@@ -93,4 +93,10 @@ public class FlightServiceImpl extends MainService implements FlightService {
     public FlightModel getFlightById(int flightId) {
         return this.flightDAO.getFlightById(flightId);
     }
+
+    @Override
+    public void writeFlightListToFile() {
+        this.flightDAO.writeFlightListToFile();
+    }
+
 }

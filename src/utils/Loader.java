@@ -7,8 +7,8 @@ import models.UserModel;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -65,8 +65,25 @@ public class Loader {
         return userList;
     }
 
-    public void writeUserListToFile() {
-        //TODO
+    public void writeUserListToFile(List<UserModel> userList) {
+        try {
+            FileChannel.open(Paths.get(DATA_FILE_USERS), StandardOpenOption.WRITE).truncate(0).close();
+        } catch (IOException e) {
+            System.out.println(INVALID_DATA);
+        }
+        try {
+            ObjectOutputStream userOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_USERS, true));
+            try {
+                userOutputStream.writeObject(userList.size());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            for (UserModel user : userList) {
+                userOutputStream.writeObject(user);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<FlightModel> readFlightListFromFile() throws IOException, ClassNotFoundException {
@@ -79,8 +96,25 @@ public class Loader {
         return flightList;
     }
 
-    public void writeFlightListToFile() {
-        //TODO
+    public void writeFlightListToFile(List<FlightModel> flightList) {
+        try {
+            FileChannel.open(Paths.get(DATA_FILE_FLIGHTS), StandardOpenOption.WRITE).truncate(0).close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            ObjectOutputStream flightOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_USERS, true));
+            try {
+                flightOutputStream.writeObject(flightList.size());
+            } catch (IOException e) {
+                System.out.println(INVALID_DATA);
+            }
+            for (FlightModel flight : flightList) {
+                flightOutputStream.writeObject(flight);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<BookingModel> readBookingListFromFile() throws IOException, ClassNotFoundException {
@@ -93,8 +127,25 @@ public class Loader {
         return bookingList;
     }
 
-    public void writeBookingListToFile() {
-
+    public void writeBookingListToFile(List<BookingModel> bookingList) {
+        try {
+            FileChannel.open(Paths.get(DATA_FILE_BOOKINGS), StandardOpenOption.WRITE).truncate(0).close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            ObjectOutputStream bookingOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_USERS, true));
+            try {
+                bookingOutputStream.writeObject(bookingList.size());
+            } catch (IOException e) {
+                e.getMessage();
+            }
+            for (BookingModel booking : bookingList) {
+                bookingOutputStream.writeObject(booking);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<UserModel> generateUserList() {
@@ -155,13 +206,9 @@ public class Loader {
         List<UserModel> userList = generateUserList();
         List<FlightModel> flightList = generateFlightList();
         List<BookingModel> bookingList = generateBookingList();
-
         ObjectOutputStream userOutputStream = null;
         ObjectOutputStream flightOutputStream = null;
         ObjectOutputStream bookingOutputStream = null;
-
-
-
         try {
             userOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_USERS));
             flightOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_FLIGHTS));
@@ -169,7 +216,6 @@ public class Loader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         try {
             if (userOutputStream != null) {
                 userOutputStream.writeObject(userList.size());
@@ -184,7 +230,6 @@ public class Loader {
                 e.printStackTrace();
             }
         }
-
         try {
             if (flightOutputStream != null) {
                 flightOutputStream.writeObject(flightList.size());
@@ -199,7 +244,6 @@ public class Loader {
                 e.printStackTrace();
             }
         }
-
         try {
             if (bookingOutputStream != null) {
                 bookingOutputStream.writeObject(bookingList.size());
@@ -214,7 +258,6 @@ public class Loader {
                 e.printStackTrace();
             }
         }
-
         try {
             Objects.requireNonNull(userOutputStream).close();
             Objects.requireNonNull(flightOutputStream).close();
@@ -223,12 +266,6 @@ public class Loader {
             e.printStackTrace();
         }
         System.out.println("New database generated successfully!");
-    }
-
-    private void writeFlightListToFile(List<FlightModel> flightList) {
-    }
-
-    private void writeBookingListToFile(List<BookingModel> bookingList) {
     }
 
 }

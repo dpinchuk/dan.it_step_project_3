@@ -44,4 +44,10 @@ public class UserServiceImpl implements UserService {
     public UserModel getUserByLogin(String login) {
         return this.userDAO.getUserByLogin(login);
     }
+
+    @Override
+    public void writeUserListToFile() {
+        this.userDAO.writeUserListToFile();
+    }
+
 }
