@@ -3,7 +3,9 @@ package dao;
 import models.BookingModel;
 import models.FlightModel;
 import models.UserModel;
+import utils.Loader;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +19,14 @@ public class BookingDAOImpl implements BookingDAO {
 
     private List<BookingModel> bookingList = new ArrayList<>();
     private int bookingId = 0;
+
+    public BookingDAOImpl() {
+        try {
+            this.bookingList = new Loader().readBookingListFromFile();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Implements int createBooking(FlightModel flight, UserModel user) returns new booking [id]

@@ -3,6 +3,7 @@ package dao;
 import models.FlightModel;
 import utils.Loader;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -21,14 +22,11 @@ public class FlightDAOImpl implements FlightDAO {
 
     private List<FlightModel> flightList;
 
-    /**
-     * Constructor
-     */
     public FlightDAOImpl() {
         try {
-            this.flightList = new Loader().getFlightModelList();
-        } catch (Exception e) {
-            System.out.println(INVALID_DATA);
+            this.flightList = new Loader().readFlightListFromFile();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

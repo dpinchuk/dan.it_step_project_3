@@ -2,6 +2,8 @@ package dao;
 
 import models.UserModel;
 
+import java.util.List;
+
 /**
  * Interface for UserDAOImpl
  *
@@ -51,4 +53,6 @@ public interface UserDAO {
      * @return UserModel
      */
     UserModel createUser(String login, String password, String userName, String userSurname);
+
+    List<UserModel> getUserList();
 }
