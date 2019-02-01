@@ -6,6 +6,7 @@ import controllers.UserController;
 import models.BookingModel;
 import models.FlightModel;
 import models.UserModel;
+import utils.Logger;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +28,7 @@ public class ViewConsole {
     private Scanner scanner;
     private int sessionId = 0;
     private UserModel user = GUEST;
+    private Logger logger = new Logger();
 
     /**
      * Main action list
@@ -34,6 +36,7 @@ public class ViewConsole {
     public void run() {
         String selectConsole = "";
         while (true) {
+            //this.logger.info("Unknown [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] has logged in");
             System.out.println("[Flight booking service]");
             System.out.println("Choose action: ");
             System.out.println("[0] - Exit");
@@ -48,6 +51,7 @@ public class ViewConsole {
             this.scanner = new Scanner(System.in);
             selectConsole = this.scanner.nextLine();
             if (selectConsole.equals(EXIT)) {
+                this.logger.info("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] is logged out");
                 System.out.println("Thank you for using our service!");
                 this.userController.writeUserListToFile();
                 this.flightController.writeFlightListToFile();
@@ -89,6 +93,7 @@ public class ViewConsole {
                 break;
             default:
                 System.out.println("\nUnknown action!");
+                this.logger.error("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] selected unknown action");
         }
         System.out.println("\n\n\n");
     }
@@ -97,6 +102,7 @@ public class ViewConsole {
      * Shows all flights next Time
      */
     private void actionOnlineScoreboard() {
+        this.logger.info("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] opened the scoreboard");
         System.out.println("\n\n[Information on all flights from Kiev in the next {" + getHoursFromMilli(DIFFERENCE) + "} hours]");
         List<FlightModel> flightsListNextHours = this.flightController.getFlightsDuringTime(DIFFERENCE);
         printFlightList(flightsListNextHours);
@@ -110,8 +116,10 @@ public class ViewConsole {
         int id = inputIntData("Flight [id] must be between [1] and [" + this.flightController.getFlightListSize() + "]!", "Flight [id]");
         if (id > 0) {
             printObjectAsString(this.flightController.getFlightInfo(id));
+            this.logger.info("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] has viewed information about exist flight [#" + id + "]");
         } else {
             System.out.println(SEARCH_FALSE);
+            this.logger.info("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] has viewed information about unknown flight [#" + id + "]");
         }
     }
 
@@ -133,6 +141,7 @@ public class ViewConsole {
                                     BookingModel booking = this.bookingController.createBooking(flight, this.userController.getUserBySessionId(this.sessionId));
                                     this.flightController.updateFlight(flight, -1);
                                     System.out.println("Created booking:\n" + booking);
+                                    this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] created booking [id=" + booking.getId() + "]");
                                 }
                             }
                         } else {
@@ -170,6 +179,7 @@ public class ViewConsole {
                         if (isBookingDelete) {
                             this.flightController.updateFlight(updateFlight, 1);
                             System.out.println(OPERATION_SUCCESS);
+                            this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] deleted booking [id=" + deleteBookingId + "]");
                         } else {
                             System.out.println(OPERATION_ERROR);
                         }
@@ -195,6 +205,7 @@ public class ViewConsole {
             List<BookingModel> userBookings = this.bookingController.getUserBookings(this.user);
             if (userBookings.size() > 0) {
                 printBookingList(userBookings);
+                this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] got bookings");
             } else {
                 System.out.println(SEARCH_FALSE);
             }
@@ -219,8 +230,10 @@ public class ViewConsole {
                         this.user = user;
                         System.out.println(SUCCESSFUL_AUTHORIZATION);
                         System.out.println("Welcone, [" + user.getUserName() + " " + user.getUserSurname() + "] !");
+                        this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + " has logged in");
                     } else {
                         System.out.println(ERROR_AUTHORIZATION_USER_IS_NOT_FOUND);
+                        this.logger.info("Unknown user [" + this.user.getUserName() + " " + this.user.getUserSurname() + " tried to log in with fake login data");
                     }
                 } else {
                     System.out.println(INVALID_DATA);
@@ -253,6 +266,7 @@ public class ViewConsole {
                         String userSurname = inputStringData("", "user surname");
                         if (!userName.equals("") && !userSurname.equals("")) {
                             this.userController.createUser(login, password, userName, userSurname);
+                            this.logger.info("User [" + userName + " " + userSurname+ " creates account [" + login + ", " + password + "]");
                         }
                     }
                 }
@@ -312,48 +326,6 @@ public class ViewConsole {
         } else {
             System.out.println("\n\n" + SEARCH_FALSE);
         }
-    }
-
-    /**
-     * Checks [id] boundary and converts it from string to a number
-     *
-     * @param str as String
-     * @return number
-     */
-    private int convertId(String str) {
-        int id = 0;
-        try {
-            id = Integer.parseInt(str);
-        } catch (NumberFormatException e) {
-            System.out.println("\n\n" + SEARCH_FALSE);
-        }
-        int boundary = this.flightController.getFlightListSize();
-        if (id >= 0 && id < boundary) {
-            return id;
-        }
-        System.out.println(INVALID_DATA);
-        System.out.println("id must be between [1] and [" + boundary + "]!");
-        return 0;
-    }
-
-    /**
-     * Converts a string to a number
-     *
-     * @param str as String
-     * @return number
-     */
-    private int getNumberFromString(String str) {
-        int num = 0;
-        try {
-            num = Integer.parseInt(str);
-        } catch (NumberFormatException e) {
-            System.out.println(INVALID_DATA);
-        }
-        if (num > 0 && num <= 100) {
-            return num;
-        }
-        System.out.println(INVALID_DATA);
-        return 0;
     }
 
     /**
