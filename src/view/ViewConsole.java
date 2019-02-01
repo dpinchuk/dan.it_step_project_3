@@ -26,7 +26,6 @@ public class ViewConsole {
     private UserController userController = new UserController();
     private Scanner scanner;
     private int sessionId = 0;
-    //private int sessionId = 243444250;
     private UserModel user = GUEST;
 
     /**
@@ -202,7 +201,6 @@ public class ViewConsole {
         } else {
             System.out.println(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
         }
-
     }
 
     /**
@@ -258,7 +256,6 @@ public class ViewConsole {
                         }
                     }
                 }
-
             } else {
                 System.out.println(ERROR_REGISTRATION_INVALID_INPUT_DATA);
             }

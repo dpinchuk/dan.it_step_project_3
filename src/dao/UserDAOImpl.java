@@ -89,6 +89,15 @@ public class UserDAOImpl implements UserDAO {
                 .orElse(null);
     }
 
+    /**
+     * Creates new User
+     *
+     * @param login       String
+     * @param password    String
+     * @param userName    String
+     * @param userSurname String
+     * @return UserModel
+     */
     @Override
     public UserModel createUser(String login, String password, String userName, String userSurname) {
         UserModel userModel = this.userList
@@ -100,11 +109,19 @@ public class UserDAOImpl implements UserDAO {
         return newUser;
     }
 
+    /**
+     * Returns user List
+     *
+     * @return List<UserModel>
+     */
     @Override
     public List<UserModel> getUserList() {
         return this.userList;
     }
 
+    /**
+     * Writes users List to file
+     */
     @Override
     public void writeUserListToFile() {
         this.loader.writeUserListToFile(this.userList);

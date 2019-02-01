@@ -3,11 +3,7 @@ package controllers;
 import models.FlightModel;
 import services.FlightServiceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
-
-import static utils.Constants.DATE_FORMAT_REGEX;
 
 /**
  * Class controller for management FlightServiceImpl.class
@@ -79,10 +75,19 @@ public class FlightController {
         return this.flightService.getFlightListSize();
     }
 
+    /**
+     * Return flight List by [id]
+     *
+     * @param flightId int
+     * @return FlightModel
+     */
     public FlightModel getFlightById(int flightId) {
         return this.flightService.getFlightById(flightId);
     }
 
+    /**
+     * Writes flight List to file
+     */
     public void writeFlightListToFile() {
         this.flightService.writeFlightListToFile();
     }
