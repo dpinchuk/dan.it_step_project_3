@@ -25,8 +25,6 @@ public class ViewConsole {
     private BookingController bookingController = new BookingController();
     private UserController userController = new UserController();
     private Scanner scanner;
-    private FlightModel flight;
-    private BookingModel booking;
     private int sessionId = 0;
     //private int sessionId = 243444250;
     private UserModel user = GUEST;
@@ -122,13 +120,10 @@ public class ViewConsole {
         if (this.sessionId != 0) {
             System.out.println("\n\n[Flight search and booking]");
             String destination = inputStringData("[1. Destination must be consist of letters and case does not matter [Kiev, berlin, MADRID]!]", "destination");
-            //String destination = "rome";
             if (!destination.equals("")) {
                 String date = inputStringData("[2. Date must be in a format [YYYY-MM-DD]!]", "date");
-                //String date = "2019-01-30";
                 if (!date.equals("") && isDateValid(date)) {
                     int ticketsNumber = inputIntData("[3. Number of tickets must be an integer!]", "number of tickets");
-                    //int ticketsNumber = 10;
                     if (ticketsNumber > 0) {
                         List<FlightModel> listFlights = this.flightController.getFlightByData(destination, date, ticketsNumber);
                         if (listFlights.size() > 0) {
@@ -136,7 +131,7 @@ public class ViewConsole {
                             FlightModel flight = selectFlight(listFlights, ticketsNumber);
                             if (flight != null) {
                                 for (int i = 0; i < ticketsNumber; i++) {
-                                    this.booking = this.bookingController.createBooking(flight, this.userController.getUserBySessionId(this.sessionId));
+                                    BookingModel booking = this.bookingController.createBooking(flight, this.userController.getUserBySessionId(this.sessionId));
                                     this.flightController.updateFlight(flight, -1);
                                     System.out.println("Created booking:\n" + booking);
                                 }
@@ -167,7 +162,7 @@ public class ViewConsole {
             System.out.println("[0] - EXIT");
             List<BookingModel> listBookings = this.bookingController.getBookingModelList();
             if (listBookings.size() > 0) {
-                int[] idArr = listBookings.stream().mapToInt(BookingModel::getId).toArray();
+                int[] idArr = this.bookingController.getUserBookings(this.user).stream().mapToInt(BookingModel::getId).toArray();
                 int deleteBookingId = inputIntData("Booking [id] must be in " + Arrays.toString(idArr) + "!", "[id] your flight booking");
                 if (deleteBookingId > 0) {
                     if (this.bookingController.isBookingExist(deleteBookingId)) {
@@ -384,6 +379,13 @@ public class ViewConsole {
         return Pattern.compile(DATE_FORMAT_REGEX).matcher(date).matches();
     }
 
+    /**
+     * Returns input string
+     *
+     * @param actionName String
+     * @param text       String
+     * @return String
+     */
     private String inputStringData(String actionName, String text) {
         if (!actionName.equals("")) {
             System.out.println("\n" + actionName);
@@ -398,6 +400,13 @@ public class ViewConsole {
         return "";
     }
 
+    /**
+     * Returns input number
+     *
+     * @param actionName String
+     * @param text       String
+     * @return int
+     */
     private int inputIntData(String actionName, String text) {
         if (!actionName.equals("")) {
             System.out.println("\n" + actionName);
@@ -410,6 +419,13 @@ public class ViewConsole {
         return 0;
     }
 
+    /**
+     * Returns flight by [id]
+     *
+     * @param listFlights   List<FlightModel>
+     * @param ticketsNumber int
+     * @return FlightModel
+     */
     private FlightModel selectFlight(List<FlightModel> listFlights, int ticketsNumber) {
         int[] idArr = listFlights.stream().mapToInt(FlightModel::getId).toArray();
         int flightId = inputIntData("\n[4. Flight [id] must be in " + Arrays.toString(idArr) + "!]", "a flight and input [id]");

@@ -108,7 +108,7 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     @Override
-    public void writeBookingListToFile() {
+    public void writeBookingListToFile()  {
         this.loader.writeBookingListToFile(this.bookingList);
     }
 

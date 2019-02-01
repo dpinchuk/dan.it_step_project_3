@@ -8,7 +8,6 @@ import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -66,23 +65,27 @@ public class Loader {
     }
 
     public void writeUserListToFile(List<UserModel> userList) {
+        ObjectOutputStream userOutputStream = null;
         try {
-            FileChannel.open(Paths.get(DATA_FILE_USERS), StandardOpenOption.WRITE).truncate(0).close();
+            userOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_USERS, false));
         } catch (IOException e) {
-            System.out.println(INVALID_DATA);
+            e.printStackTrace();
         }
         try {
-            ObjectOutputStream userOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_USERS, true));
-            try {
+            if (userOutputStream != null) {
                 userOutputStream.writeObject(userList.size());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            for (UserModel user : userList) {
-                userOutputStream.writeObject(user);
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        for (UserModel user : userList) {
+            try {
+                if (userOutputStream != null) {
+                    userOutputStream.writeObject(user);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -97,23 +100,27 @@ public class Loader {
     }
 
     public void writeFlightListToFile(List<FlightModel> flightList) {
+        ObjectOutputStream flightOutputStream = null;
         try {
-            FileChannel.open(Paths.get(DATA_FILE_FLIGHTS), StandardOpenOption.WRITE).truncate(0).close();
+            flightOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_FLIGHTS, false));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            ObjectOutputStream flightOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_USERS, true));
-            try {
+            if (flightOutputStream != null) {
                 flightOutputStream.writeObject(flightList.size());
-            } catch (IOException e) {
-                System.out.println(INVALID_DATA);
-            }
-            for (FlightModel flight : flightList) {
-                flightOutputStream.writeObject(flight);
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        for (FlightModel flight : flightList) {
+            try {
+                if (flightOutputStream != null) {
+                    flightOutputStream.writeObject(flight);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -128,23 +135,27 @@ public class Loader {
     }
 
     public void writeBookingListToFile(List<BookingModel> bookingList) {
+        ObjectOutputStream  bookingOutputStream = null;
         try {
-            FileChannel.open(Paths.get(DATA_FILE_BOOKINGS), StandardOpenOption.WRITE).truncate(0).close();
+            bookingOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_BOOKINGS, false));
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            ObjectOutputStream bookingOutputStream = new ObjectOutputStream(new FileOutputStream(DATA_FILE_USERS, true));
-            try {
+            if (bookingOutputStream != null) {
                 bookingOutputStream.writeObject(bookingList.size());
-            } catch (IOException e) {
-                e.getMessage();
-            }
-            for (BookingModel booking : bookingList) {
-                bookingOutputStream.writeObject(booking);
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        for (BookingModel booking : bookingList) {
+            try {
+                if (bookingOutputStream != null) {
+                    bookingOutputStream.writeObject(booking);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

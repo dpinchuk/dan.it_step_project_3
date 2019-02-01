@@ -56,7 +56,6 @@ public interface Constants {
 
     String KIEV = "Kiev";
 
-    //String[] DIRECTIONS = {"Rome", "Gent"};
     String[] DIRECTIONS = {
             "Minsk",
             "Grodno",
