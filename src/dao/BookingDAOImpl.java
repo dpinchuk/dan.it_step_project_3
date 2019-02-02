@@ -19,7 +19,6 @@ public class BookingDAOImpl implements BookingDAO {
 
     private List<BookingModel> bookingList = new ArrayList<>();
     private Loader loader = new Loader();
-    private int bookingId = 0;
 
     public BookingDAOImpl() {
         try {
@@ -38,7 +37,8 @@ public class BookingDAOImpl implements BookingDAO {
      */
     @Override
     public BookingModel createBooking(FlightModel flight, UserModel user) {
-        BookingModel bookingModel = new BookingModel(++bookingId, flight, user);
+        int bookingId = bookingList.get(bookingList.size() - 1).getId() + 1;
+        BookingModel bookingModel = new BookingModel(bookingId, flight, user);
         this.bookingList.add(bookingModel);
         return bookingModel;
     }
@@ -78,35 +78,15 @@ public class BookingDAOImpl implements BookingDAO {
      */
     @Override
     public List<BookingModel> getUserBookings(UserModel user) {
-        return this.getBookingModelList()
+        return this.bookingList
                 .stream()
                 .filter(e -> e.getUser().equals(user))
                 .collect(Collectors.toList());
     }
 
     /**
-     * Implements List<BookingModel> getUserBookings(UserModel user) and returns user's bookings by [sessionId]
-     *
-     * @param sessionId int
-     * @return List<BookingModel>
+     * Writes Booking List To File
      */
-    @Override
-    public List<BookingModel> getUserBookings(int sessionId) {
-        return this.getBookingModelList()
-                .stream()
-                .filter(e -> e.hashCode() == sessionId)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Getter
-     *
-     * @return bookingList
-     */
-    public List<BookingModel> getBookingModelList() {
-        return this.bookingList;
-    }
-
     @Override
     public void writeBookingListToFile()  {
         this.loader.writeBookingListToFile(this.bookingList);

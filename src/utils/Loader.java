@@ -183,7 +183,7 @@ public class Loader {
         Random random = new Random();
         for (int i = 0; i < FLIGHTS_LIMIT; i++) {
             dateTime = LocalDateTime.parse(LocalDateTime.now().plusHours(hours).plusMinutes(minutes).format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)), DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
-            seats = random.ints(50, 100).limit(1).findFirst().getAsInt();
+            seats = random.ints(75, 100).limit(1).findFirst().getAsInt();
             index = random.ints(0, DIRECTIONS.length).limit(1).findFirst().getAsInt();
             flight = new FlightModel(
                     ++countFlights,
@@ -193,7 +193,7 @@ public class Loader {
                     seats
             );
             flightList.add(flight);
-            hours += 4;
+            hours += 2;
             minutes += 30;
         }
         return flightList;

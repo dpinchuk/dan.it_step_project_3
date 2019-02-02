@@ -37,7 +37,8 @@ public class FlightDAOImpl implements FlightDAO {
      */
     @Override
     public FlightModel getFlightById(int id) {
-        return this.flightList.stream()
+        return this.flightList
+                .stream()
                 .filter(e -> e.getId() == id)
                 .findFirst()
                 .orElse(null);

@@ -48,11 +48,13 @@ public interface Constants {
 
     String ERROR_AUTHORIZATION_USER_IS_ALREADY_AUTHORIZED = "Error authorization: [User is already authorized!]";
 
+    String SUCCESSFUL_REGISTRATION = "Successful registration!";
+
     String ERROR_REGISTRATION_INVALID_INPUT_DATA = "Error registration: [Invalid input data!]";
 
     String ERROR_REGISTRATION_USER_IS_ALREADY_REGISTERED = "Error registration: [User is already registered!]";
 
-    int FLIGHTS_LIMIT = 50;
+    int FLIGHTS_LIMIT = 100;
 
     int BOOKINGS_LIMIT = 25;
 

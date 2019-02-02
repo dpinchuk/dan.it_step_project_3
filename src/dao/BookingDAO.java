@@ -46,14 +46,6 @@ public interface BookingDAO {
      */
     List<BookingModel> getUserBookings(UserModel user); //получаем список забронированных рейсов юзера
 
-    /**
-     * Return List<BookingModel> by sessionId (for authorized users only)
-     *
-     * @param sessionId int
-     * @return List<BookingModel>
-     */
-    List<BookingModel> getUserBookings(int sessionId); //получаем список забронированных рейсов авторизованного юзера
-
     void writeBookingListToFile();
 
 }

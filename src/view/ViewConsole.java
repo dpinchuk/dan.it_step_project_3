@@ -6,6 +6,7 @@ import controllers.UserController;
 import models.BookingModel;
 import models.FlightModel;
 import models.UserModel;
+import utils.Exceptions;
 import utils.Logger;
 
 import java.util.Arrays;
@@ -36,7 +37,6 @@ public class ViewConsole {
     public void run() {
         String selectConsole = "";
         while (true) {
-            //this.logger.info("Unknown [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] has logged in");
             System.out.println("[Flight booking service]");
             System.out.println("Choose action: ");
             System.out.println("[0] - Exit");
@@ -51,7 +51,7 @@ public class ViewConsole {
             this.scanner = new Scanner(System.in);
             selectConsole = this.scanner.nextLine();
             if (selectConsole.equals(EXIT)) {
-                this.logger.info("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] is logged out");
+                this.logger.info("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] has left the system");
                 System.out.println("Thank you for using our service!");
                 this.userController.writeUserListToFile();
                 this.flightController.writeFlightListToFile();
@@ -77,7 +77,7 @@ public class ViewConsole {
                 actionViewFlightInfo();
                 break;
             case "3":
-                actionSearchFlightAndBooking();
+                actionSearchFlightAndCreateBooking();
                 break;
             case "4":
                 actionDeleteFlightBooking();
@@ -92,7 +92,11 @@ public class ViewConsole {
                 actionRegistration();
                 break;
             default:
-                System.out.println("\nUnknown action!");
+                try {
+                    throw new Exceptions("Unknown action!");
+                } catch (Exceptions exceptions) {
+                    System.out.println(exceptions.getMessage());
+                }
                 this.logger.error("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] selected unknown action");
         }
         System.out.println("\n\n\n");
@@ -118,12 +122,16 @@ public class ViewConsole {
             printObjectAsString(this.flightController.getFlightInfo(id));
             this.logger.info("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] has viewed information about exist flight [#" + id + "]");
         } else {
-            System.out.println(SEARCH_FALSE);
+            try {
+                throw new Exceptions(SEARCH_FALSE);
+            } catch (Exceptions exceptions) {
+                System.out.println(exceptions.getMessage());
+            }
             this.logger.info("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] has viewed information about unknown flight [#" + id + "]");
         }
     }
 
-    private void actionSearchFlightAndBooking() {
+    private void actionSearchFlightAndCreateBooking() {
         if (this.sessionId != 0) {
             System.out.println("\n\n[Flight search and booking]");
             String destination = inputStringData("[1. Destination must be consist of letters and case does not matter [Kiev, berlin, MADRID]!]", "destination");
@@ -145,19 +153,39 @@ public class ViewConsole {
                                 }
                             }
                         } else {
-                            System.out.println(SEARCH_FALSE);
+                            try {
+                                throw new Exceptions(SEARCH_FALSE);
+                            } catch (Exceptions exceptions) {
+                                System.out.println(exceptions.getMessage());
+                            }
                         }
                     } else {
-                        System.out.println(INVALID_DATA);
+                        try {
+                            throw new Exceptions(INVALID_DATA);
+                        } catch (Exceptions exceptions) {
+                            System.out.println(exceptions.getMessage());
+                        }
                     }
                 } else {
-                    System.out.println(INVALID_DATA);
+                    try {
+                        throw new Exceptions(INVALID_DATA);
+                    } catch (Exceptions exceptions) {
+                        System.out.println(exceptions.getMessage());
+                    }
                 }
             } else {
-                System.out.println(INVALID_DATA);
+                try {
+                    throw new Exceptions(INVALID_DATA);
+                } catch (Exceptions exceptions) {
+                    System.out.println(exceptions.getMessage());
+                }
             }
         } else {
-            System.out.println(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
+            try {
+                throw new Exceptions(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
+            } catch (Exceptions exceptions) {
+                System.out.println(exceptions.getMessage());
+            }
         }
     }
 
@@ -168,7 +196,7 @@ public class ViewConsole {
     private void actionDeleteFlightBooking() {
         if (this.sessionId != 0) {
             System.out.println("[0] - EXIT");
-            List<BookingModel> listBookings = this.bookingController.getBookingModelList();
+            List<BookingModel> listBookings = this.bookingController.getUserBookings(this.user);
             if (listBookings.size() > 0) {
                 int[] idArr = this.bookingController.getUserBookings(this.user).stream().mapToInt(BookingModel::getId).toArray();
                 int deleteBookingId = inputIntData("Booking [id] must be in " + Arrays.toString(idArr) + "!", "[id] your flight booking");
@@ -181,19 +209,39 @@ public class ViewConsole {
                             System.out.println(OPERATION_SUCCESS);
                             this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] deleted booking [id=" + deleteBookingId + "]");
                         } else {
-                            System.out.println(OPERATION_ERROR);
+                            try {
+                                throw new Exceptions(OPERATION_ERROR);
+                            } catch (Exceptions exceptions) {
+                                System.out.println(exceptions.getMessage());
+                            }
                         }
                     } else {
-                        System.out.println(INVALID_DATA);
+                        try {
+                            throw new Exceptions(INVALID_DATA);
+                        } catch (Exceptions exceptions) {
+                            System.out.println(exceptions.getMessage());
+                        }
                     }
                 } else {
-                    System.out.println(BREAK_ACTION);
+                    try {
+                        throw new Exceptions(BREAK_ACTION);
+                    } catch (Exceptions exceptions) {
+                        System.out.println(exceptions.getMessage());
+                    }
                 }
             } else {
-                System.out.println(SEARCH_FALSE);
+                try {
+                    throw new Exceptions(SEARCH_FALSE);
+                } catch (Exceptions exceptions) {
+                    System.out.println(exceptions.getMessage());
+                }
             }
         } else {
-            System.out.println(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
+            try {
+                throw new Exceptions(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
+            } catch (Exceptions exceptions) {
+                System.out.println(exceptions.getMessage());
+            }
         }
     }
 
@@ -207,10 +255,18 @@ public class ViewConsole {
                 printBookingList(userBookings);
                 this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] got bookings");
             } else {
-                System.out.println(SEARCH_FALSE);
+                try {
+                    throw new Exceptions(SEARCH_FALSE);
+                } catch (Exceptions exceptions) {
+                    System.out.println(exceptions.getMessage());
+                }
             }
         } else {
-            System.out.println(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
+            try {
+                throw new Exceptions(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
+            } catch (Exceptions exceptions) {
+                System.out.println(exceptions.getMessage());
+            }
         }
     }
 
@@ -232,14 +288,26 @@ public class ViewConsole {
                         System.out.println("Welcone, [" + user.getUserName() + " " + user.getUserSurname() + "] !");
                         this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + " has logged in");
                     } else {
-                        System.out.println(ERROR_AUTHORIZATION_USER_IS_NOT_FOUND);
+                        try {
+                            throw new Exceptions(ERROR_AUTHORIZATION_USER_IS_NOT_FOUND);
+                        } catch (Exceptions exceptions) {
+                            System.out.println(exceptions.getMessage());
+                        }
                         this.logger.info("Unknown user [" + this.user.getUserName() + " " + this.user.getUserSurname() + " tried to log in with fake login data");
                     }
                 } else {
-                    System.out.println(INVALID_DATA);
+                    try {
+                        throw new Exceptions(INVALID_DATA);
+                    } catch (Exceptions exceptions) {
+                        System.out.println(exceptions.getMessage());
+                    }
                 }
             } else {
-                System.out.println(INVALID_DATA);
+                try {
+                    throw new Exceptions(INVALID_DATA);
+                } catch (Exceptions exceptions) {
+                    System.out.println(exceptions.getMessage());
+                }
             }
         } else {
             System.out.println("[Log out user]");
@@ -266,15 +334,30 @@ public class ViewConsole {
                         String userSurname = inputStringData("", "user surname");
                         if (!userName.equals("") && !userSurname.equals("")) {
                             this.userController.createUser(login, password, userName, userSurname);
+                            System.out.println(SUCCESSFUL_REGISTRATION + " - [" + userName + " " + userSurname + "]");
                             this.logger.info("User [" + userName + " " + userSurname+ " creates account [" + login + ", " + password + "]");
+                        }
+                    } else {
+                        try {
+                            throw new Exceptions(ERROR_REGISTRATION_INVALID_INPUT_DATA);
+                        } catch (Exceptions exceptions) {
+                            System.out.println(exceptions.getMessage());
                         }
                     }
                 }
             } else {
-                System.out.println(ERROR_REGISTRATION_INVALID_INPUT_DATA);
+                try {
+                    throw new Exceptions(ERROR_REGISTRATION_USER_IS_ALREADY_REGISTERED);
+                } catch (Exceptions exceptions) {
+                    System.out.println(exceptions.getMessage());
+                }
             }
         } else {
-            System.out.println(ERROR_REGISTRATION_USER_IS_ALREADY_REGISTERED);
+            try {
+                throw new Exceptions(ERROR_AUTHORIZATION_USER_IS_ALREADY_AUTHORIZED);
+            } catch (Exceptions exceptions) {
+                System.out.println(exceptions.getMessage());
+            }
         }
     }
 

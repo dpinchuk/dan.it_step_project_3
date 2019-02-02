@@ -45,15 +45,6 @@ public class BookingServiceImpl extends MainService implements BookingService {
     }
 
     /**
-     * Returns all bookings [Special method!!!]
-     *
-     * @return List<BookingModel>
-     */
-    public List<BookingModel> getBookingModelList() {
-        return this.bookingDAO.getBookingModelList();
-    }
-
-    /**
      * Returns all user bookings [user must be authorized]
      *
      * @param user UserModel
