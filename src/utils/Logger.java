@@ -21,6 +21,7 @@ public class Logger {
     private void saveDataToFile(String message) {
         try {
             Files.write(Paths.get(DATA_FILES_LOG), message.getBytes(), StandardOpenOption.APPEND);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
