@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static utils.Constants.DATE_FORMAT_REGEX;
-import static utils.Constants.DATE_TIME_PATTERN;
 
 /**
  * Service class extends MainService implements FlightService
@@ -90,10 +89,19 @@ public class FlightServiceImpl extends MainService implements FlightService {
         return this.flightDAO.getFlightListSize();
     }
 
+    /**
+     * Returns flight by [id]
+     *
+     * @param flightId int
+     * @return FlightModel
+     */
     public FlightModel getFlightById(int flightId) {
         return this.flightDAO.getFlightById(flightId);
     }
 
+    /**
+     * Writes flight List to file
+     */
     @Override
     public void writeFlightListToFile() {
         this.flightDAO.writeFlightListToFile();

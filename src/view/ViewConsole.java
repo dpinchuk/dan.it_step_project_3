@@ -92,12 +92,12 @@ public class ViewConsole {
                 actionRegistration();
                 break;
             default:
+                this.logger.error("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] selected unknown action");
                 try {
                     throw new Exceptions("Unknown action!");
                 } catch (Exceptions exceptions) {
                     System.out.println(exceptions.getMessage());
                 }
-                this.logger.error("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] selected unknown action");
         }
         System.out.println("\n\n\n");
     }
@@ -188,7 +188,6 @@ public class ViewConsole {
             }
         }
     }
-
 
     /**
      * Cancel booking by [id]
@@ -335,7 +334,7 @@ public class ViewConsole {
                         if (!userName.equals("") && !userSurname.equals("")) {
                             this.userController.createUser(login, password, userName, userSurname);
                             System.out.println(SUCCESSFUL_REGISTRATION + " - [" + userName + " " + userSurname + "]");
-                            this.logger.info("User [" + userName + " " + userSurname+ " creates account [" + login + ", " + password + "]");
+                            this.logger.info("User [" + userName + " " + userSurname + " creates account [" + login + ", " + password + "]");
                         }
                     } else {
                         try {

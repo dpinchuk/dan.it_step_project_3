@@ -88,6 +88,10 @@ public class BookingServiceImpl extends MainService implements BookingService {
         return this.bookingDAO.deleteBookingById(id);
     }
 
+    /**
+     * Writes booking List to file
+     * void
+     */
     @Override
     public void writeBookingListToFile() {
         this.bookingDAO.writeBookingListToFile();

@@ -1,6 +1,11 @@
 package utils;
 
-public class Exceptions extends Exception {
+/**
+ * Exception class
+ *
+ * @author Pinchuk Dmitry
+ */
+public class Exceptions extends RuntimeException {
 
     public Exceptions() {
     }
@@ -10,11 +15,11 @@ public class Exceptions extends Exception {
     }
 
     public Exceptions(Throwable cause) {
-        super (cause);
+        super(cause);
     }
 
     public Exceptions(String message, Throwable cause) {
-        super (message, cause);
+        super(message, cause);
     }
 
 }

@@ -21,8 +21,6 @@ public interface FlightDAO {
     FlightModel getFlightById(int id); //возвращает рейс по id
 
     /**
-     * Return List<FlightModel> by destination, date, seatsNumber
-     *
      * @param destination String
      * @param date        LocalDate
      * @param seatsNumber int
@@ -37,16 +35,21 @@ public interface FlightDAO {
     void updateFlight(FlightModel flight, int place); //изменяет количество занятых мест рейса на +-1
 
     /**
-     * Returns the list of flights for the specified time
-     *
      * @param milliCurrent long
      * @param milliFlight  long
      * @return List<FlightModel>
      */
     List<FlightModel> getFlightsDuringTime(long milliCurrent, long milliFlight); //возвращает список рейсов в ближайшее время {24 часа по дефолту}
 
+    /**
+     * @param flight FlightModel
+     * @return boolean
+     */
     boolean isFlightExist(FlightModel flight);
 
+    /**
+     * void
+     */
     void writeFlightListToFile();
 
 }

@@ -8,6 +8,7 @@ public class Main {
 
     /**
      * psvm -> entry point
+     *
      * @param args String[]
      */
     public static void main(String[] args) {

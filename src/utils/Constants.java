@@ -2,6 +2,11 @@ package utils;
 
 import models.UserModel;
 
+/**
+ * Interface of constants
+ *
+ * @author Pinchuk Dmitry
+ */
 public interface Constants {
 
     String EXIT = "0";
@@ -81,7 +86,7 @@ public interface Constants {
             "Naples",
             "Cairo",
             "Vladivostok",
-            "Tokyo","" +
+            "Tokyo", "" +
             "Beijing",
             "Sydney",
             "Dubai",

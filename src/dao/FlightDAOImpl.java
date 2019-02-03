@@ -102,6 +102,12 @@ public class FlightDAOImpl implements FlightDAO {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Checks for flight existing
+     *
+     * @param flight FlightModel
+     * @return boolean
+     */
     @Override
     public boolean isFlightExist(FlightModel flight) {
         return this.flightList
@@ -118,6 +124,10 @@ public class FlightDAOImpl implements FlightDAO {
         return this.flightList.size();
     }
 
+    /**
+     * Writes data to file
+     * void
+     */
     @Override
     public void writeFlightListToFile() {
         this.loader.writeFlightListToFile(this.flightList);

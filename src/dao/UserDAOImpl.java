@@ -110,16 +110,6 @@ public class UserDAOImpl implements UserDAO {
     }
 
     /**
-     * Returns user List
-     *
-     * @return List<UserModel>
-     */
-    @Override
-    public List<UserModel> getUserList() {
-        return this.userList;
-    }
-
-    /**
      * Writes users List to file
      */
     @Override

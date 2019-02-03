@@ -11,21 +11,33 @@ import static utils.Constants.DATE_FORMAT_REGEX;
  */
 public class MainService {
 
+    /**
+     * Checks for number > 0
+     *
+     * @param number int
+     * @return boolean
+     */
     public boolean isValidNumber(int number) {
-        if (number > 0) {
-            return true;
-        }
-        return false;
+        return number > 0;
     }
 
+    /**
+     * Checks for valid string
+     *
+     * @param str String
+     * @return boolean
+     */
     public boolean isValidString(String str) {
-        if (str != null && !str.equals("") && str.length() < 32) {
-            //TODO XSS-inj, SQL-inj, CSRF-inj
-            return true;
-        }
-        return false;
+        //TODO XSS-inj, SQL-inj, CSRF-inj
+        return str != null && !str.equals("") && str.length() < 32;
     }
 
+    /**
+     * Checks for valid date
+     *
+     * @param date String
+     * @return boolean
+     */
     private boolean isDateValid(String date) {
         return Pattern.compile(DATE_FORMAT_REGEX).matcher(date).matches();
     }
