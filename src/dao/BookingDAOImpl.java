@@ -85,11 +85,10 @@ public class BookingDAOImpl implements BookingDAO {
      * @return BookingModel
      */
     @Override
-    public BookingModel getBookingById(int id) {
+    public BookingModel getUserBookingById(int id, UserModel user) {
         return this.bookingList
                 .stream()
-                .filter(e ->
-                        e.getId() == id)
+                .filter(e -> e.getUser().equals(user) && e.getId() == id)
                 .findFirst()
                 .orElse(null);
     }

@@ -32,8 +32,8 @@ public class BookingController {
      * @param bookingId int
      * @return boolean
      */
-    public boolean isBookingExist(int bookingId) {
-        return this.bookingService.isBookingExist(bookingId);
+    public boolean isBookingExist(int bookingId, UserModel user) {
+        return this.bookingService.isBookingExist(bookingId, user);
     }
 
     /**

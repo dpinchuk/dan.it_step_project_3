@@ -26,9 +26,9 @@ public class BookingServiceImpl extends MainService implements BookingService {
      * @return String
      */
     @Override
-    public String getBookingInfo(int id) {
+    public String getBookingInfo(int id, UserModel user) {
         if (isValidNumber(id)) {
-            return this.bookingDAO.getBookingById(id).toString();
+            return this.bookingDAO.getUserBookingById(id, user).toString();
         }
         return "";
     }
@@ -36,13 +36,14 @@ public class BookingServiceImpl extends MainService implements BookingService {
     /**
      * Returns true/false if booking exist
      *
-     * @param id int
+     * @param id   int
+     * @param user UserModel
      * @return boolean
      */
     @Override
-    public boolean isBookingExist(int id) {
+    public boolean isBookingExist(int id, UserModel user) {
         if (isValidNumber(id)) {
-            return this.bookingDAO.getBookingById(id) != null;
+            return this.bookingDAO.getUserBookingById(id, user) != null;
         }
         return false;
     }
@@ -94,7 +95,7 @@ public class BookingServiceImpl extends MainService implements BookingService {
     public BookingModel getBookingById(int id, UserModel user) {
         BookingModel booking;
         if (id > 0) {
-            booking = this.bookingDAO.getBookingById(id);
+            booking = this.bookingDAO.getUserBookingById(id, user);
             if (booking != null) {
                 return booking;
             } else {
@@ -125,7 +126,7 @@ public class BookingServiceImpl extends MainService implements BookingService {
                 return 0;
             }
             if (idNum > 0) {
-                booking = this.bookingDAO.getBookingById(idNum);
+                booking = this.bookingDAO.getUserBookingById(idNum, user);
                 if (booking == null) {
                     getException(INVALID_DATA, "User [" + user.getUserName() + " " + user.getUserSurname() + "] did not delete booking by [id=" + id + "]");
                     return 0;

@@ -121,29 +121,37 @@ public class ViewConsole {
         printString(flightInfo);
     }
 
-
+    /**
+     * Search flight and create booking
+     */
     private void actionSearchFlightAndCreateBooking() {
         if (this.sessionId != 0) {
             System.out.println("\n\n[Flight search and booking]");
             String destination = inputStringData("[1. Destination must be consist of letters and case does not matter [Kiev, berlin, MADRID]!]", "destination");
             String date = inputStringData("[2. Date must be in a format [YYYY-MM-DD]!]", "date");
             while (!isDateValid(date)) {
+                if (date.equals(EXIT)) {
+                    System.out.println(BREAK_ACTION);
+                    break;
+                }
                 System.out.println(INVALID_DATA + " Repeat to enter date:");
                 date = inputStringData("[2. Date must be in a format [YYYY-MM-DD]!]", "date");
             }
-            String ticketsNumber = inputStringData("[3. Number of tickets must be an integer!]", "number of tickets");
-            try {
-                int tickets = Integer.parseInt(ticketsNumber);
-                List<FlightModel> flightList = this.flightController.getFlightByData(destination, date, tickets, this.user);
-                if (flightList.size() > 0) {
-                    printFlightList(flightList);
-                    createBooking(flightList, tickets);
-                } else {
-                    System.out.println(SEARCH_FALSE + " Please, change search parameters [destination, date, number of tickets]");
+            if (isDateValid(date)) {
+                String ticketsNumber = inputStringData("[3. Number of tickets must be an integer!]", "number of tickets");
+                try {
+                    int tickets = Integer.parseInt(ticketsNumber);
+                    List<FlightModel> flightList = this.flightController.getFlightByData(destination, date, tickets, this.user);
+                    if (flightList.size() > 0) {
+                        printFlightList(flightList);
+                        createBooking(flightList, tickets);
+                    } else {
+                        System.out.println(SEARCH_FALSE + " Please, change search parameters [destination, date, number of tickets]");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println(INVALID_DATA);
+                    this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] entered invalid number of tickets");
                 }
-            } catch (NumberFormatException e) {
-                System.out.println(INVALID_DATA);
-                this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] entered invalid number of tickets");
             }
         } else {
             System.out.println(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
@@ -152,8 +160,9 @@ public class ViewConsole {
 
     /**
      * Create new booking
+     *
      * @param flightList List<FlightModel>
-     * @param tickets int
+     * @param tickets    int
      */
     private void createBooking(List<FlightModel> flightList, int tickets) {
         int[] idArr = flightList.stream().mapToInt(FlightModel::getId).toArray();
@@ -199,6 +208,8 @@ public class ViewConsole {
                 System.out.println(OPERATION_SUCCESS);
                 this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] deleted booking [id=" + bookingDel + "]");
             }
+        } else {
+            System.out.println(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
         }
     }
 

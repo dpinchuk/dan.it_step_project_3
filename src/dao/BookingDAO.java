@@ -34,9 +34,10 @@ public interface BookingDAO {
 
     /**
      * @param id int
-     * @return object BookingModel
+     * @param user UserModel
+     * @return BookingModel
      */
-    BookingModel getBookingById(int id); //получаем забронированный рейс по id
+    BookingModel getUserBookingById(int id, UserModel user); //получаем забронированный рейс по id
 
     /**
      * @param user UserModel
