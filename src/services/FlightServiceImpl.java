@@ -2,13 +2,15 @@ package services;
 
 import dao.FlightDAOImpl;
 import models.FlightModel;
+import models.UserModel;
+import utils.Logger;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static utils.Constants.DATE_FORMAT_REGEX;
+import static utils.Constants.*;
 
 /**
  * Service class extends MainService implements FlightService
@@ -33,12 +35,37 @@ public class FlightServiceImpl extends MainService implements FlightService {
     /**
      * Returns info about flight
      *
-     * @param id int
-     * @return String
+     * @param id   String
+     * @param user UserModel
+     * @return FlightModel
      */
     @Override
-    public String getFlightInfo(int id) {
-        return this.flightDAO.getFlightById(id).toString();
+    public String getFlightInfo(String id, UserModel user) {
+        FlightModel flight;
+        if (!id.equals("")) {
+            int idNum = -1;
+            try {
+                idNum = Integer.parseInt(id);
+            } catch (NumberFormatException e) {
+                getException(INVALID_DATA, "User [" + user.getUserName() + " " + user.getUserSurname() + "] entered incorrect flight [id=" + id + "]");
+                return "";
+            }
+            if (idNum > 0) {
+                flight = this.flightDAO.getFlightById(idNum);
+                if (flight == null) {
+                    getException(SEARCH_FALSE, "User [" + user.getUserName() + " " + user.getUserSurname() + "] did not find flight by [id=" + id + "]");
+                    return "";
+                } else {
+                    return flight.toString();
+                }
+            } else {
+                getException(INVALID_DATA, "User [" + user.getUserName() + " " + user.getUserSurname() + "] entered incorrect [id=" + id + "]");
+                return "";
+            }
+        } else {
+            getException(INVALID_DATA, "User [" + user.getUserName() + " " + user.getUserSurname() + "] entered incorrect [id=" + id + "]");
+            return "";
+        }
     }
 
     /**
@@ -53,19 +80,25 @@ public class FlightServiceImpl extends MainService implements FlightService {
     }
 
     /**
-     * Returns fkights list by data
+     * Returns flights list by data
      *
      * @param destination String
      * @param date        String
      * @param seatsNumber int
+     * @param user        UserModel
      * @return List<FlightModel>
      */
     @Override
-    public List<FlightModel> getFlightByData(String destination, String date, int seatsNumber) {
+    public List<FlightModel> getFlightByData(String destination, String date, int seatsNumber, UserModel user) {
+        if (destination.equals("") || seatsNumber <= 0 || user == null) {
+            getException(INVALID_DATA, INVALID_DATA + " " + "User entered invalid data during searching flights");
+            return new ArrayList<>();
+        }
         if (Pattern.compile(DATE_FORMAT_REGEX).matcher(date).matches()) {
             LocalDate localDate = LocalDate.parse(date);
             return this.flightDAO.getFlightByData(destination, localDate, seatsNumber);
         }
+        getException(INVALID_DATA, INVALID_DATA + " " + "User entered invalid data during searching flights");
         return new ArrayList<>();
     }
 

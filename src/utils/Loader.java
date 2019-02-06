@@ -160,7 +160,8 @@ public class Loader {
         ObjectInputStream bookingInputStream = new ObjectInputStream(new FileInputStream(DATA_FILE_BOOKINGS));
         int bookingCount = (int) bookingInputStream.readObject();
         for (int i = 0; i < bookingCount; i++) {
-            bookingList.add((BookingModel) bookingInputStream.readObject());
+            BookingModel booking = (BookingModel) bookingInputStream.readObject();
+            bookingList.add(booking);
         }
         return bookingList;
     }
@@ -250,10 +251,9 @@ public class Loader {
      *
      * @return List<BookingModel>
      */
-    private List<BookingModel> generateBookingList() {
+    private List<BookingModel> generateBookingList(List<FlightModel> flightList) {
         List<BookingModel> bookingList = new ArrayList<>();
         List<UserModel> userList = generateUserList();
-        List<FlightModel> flightList = generateFlightList();
         int countBookings = 0;
         BookingModel booking;
         Random random = new Random();
@@ -271,7 +271,7 @@ public class Loader {
     private void writeObjectListToFile() {
         List<UserModel> userList = generateUserList();
         List<FlightModel> flightList = generateFlightList();
-        List<BookingModel> bookingList = generateBookingList();
+        List<BookingModel> bookingList = generateBookingList(flightList);
         ObjectOutputStream userOutputStream = null;
         ObjectOutputStream flightOutputStream = null;
         ObjectOutputStream bookingOutputStream = null;

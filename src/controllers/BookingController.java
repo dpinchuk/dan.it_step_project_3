@@ -22,8 +22,8 @@ public class BookingController {
      * @param user UserModel
      * @return List<BookingModel>
      */
-    public List<BookingModel> getUserBookings(UserModel user) {
-        return this.bookingService.getUserBookings(user);
+    public List<BookingModel> getUserBookings(UserModel user, int sessionId) {
+        return this.bookingService.getUserBookings(user, sessionId);
     }
 
     /**
@@ -53,18 +53,20 @@ public class BookingController {
      * @param id int
      * @return BookingModel
      */
-    public BookingModel getBookingById(int id) {
-        return this.bookingService.getBookingById(id);
+    public BookingModel getBookingById(int id, UserModel user) {
+        return this.bookingService.getBookingById(id, user);
     }
 
     /**
      * Deleting booking by [id]
+     * Returns flight [id]
      *
-     * @param id int
-     * @return boolean
+     * @param id   int
+     * @param user UserModel
+     * @return int
      */
-    public boolean deleteBookingById(int id) {
-        return this.bookingService.deleteBookingById(id);
+    public int deleteBookingById(String id, UserModel user) {
+        return this.bookingService.deleteBookingById(id, user);
     }
 
     /**

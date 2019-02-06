@@ -1,6 +1,7 @@
 package controllers;
 
 import models.FlightModel;
+import models.UserModel;
 import services.FlightServiceImpl;
 
 import java.util.List;
@@ -27,11 +28,12 @@ public class FlightController {
     /**
      * Returns info about flight
      *
-     * @param id int
-     * @return String
+     * @param id   String
+     * @param user UserModel
+     * @return UserModel
      */
-    public String getFlightInfo(int id) {
-        return this.flightService.getFlightInfo(id);
+    public String getFlightInfo(String id, UserModel user) {
+        return this.flightService.getFlightInfo(id, user);
     }
 
     /**
@@ -52,8 +54,8 @@ public class FlightController {
      * @param seatsNumber int
      * @return List<FlightModel>
      */
-    public List<FlightModel> getFlightByData(String destination, String date, int seatsNumber) {
-        return this.flightService.getFlightByData(destination, date, seatsNumber);
+    public List<FlightModel> getFlightByData(String destination, String date, int seatsNumber, UserModel user) {
+        return this.flightService.getFlightByData(destination, date, seatsNumber, user);
     }
 
     /**

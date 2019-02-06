@@ -1,6 +1,7 @@
 package services;
 
 import models.FlightModel;
+import models.UserModel;
 
 import java.util.List;
 
@@ -18,18 +19,21 @@ public interface FlightService {
     List<FlightModel> getFlightsDuringTime(int milliLocalDateTime); //выводит все рейсы в часовом промежутке ms
 
     /**
-     * @param id int
-     * @return String
+     * @param id   String
+     * @param user UserModel
+     * @return FlightModel
      */
-    String getFlightInfo(int id); //получаем информацию о рейсе по id
+    String getFlightInfo(String id, UserModel user); //получаем информацию о рейсе по id
 
     /**
+     *
      * @param destination String
-     * @param date        String
+     * @param date String
      * @param seatsNumber int
+     * @param user UserModel
      * @return List<FlightModel>
      */
-    List<FlightModel> getFlightByData(String destination, String date, int seatsNumber); //возвращает список рейсов по данным
+    List<FlightModel> getFlightByData(String destination, String date, int seatsNumber, UserModel user); //возвращает список рейсов по данным
 
     /**
      * @param flight FlightModel

@@ -25,6 +25,8 @@ public class FlightModel implements Serializable {
         this.seatsRemaining = seatsRemaining;
     }
 
+    public FlightModel() {}
+
     public int getId() {
         return id;
     }

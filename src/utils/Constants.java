@@ -25,7 +25,7 @@ public interface Constants {
 
     String TIME_ZONE = "Europe/Kiev";
 
-    String DATE_FORMAT_REGEX = "^((?:(?:1[6-9]|2[0-9])\\d{2})(-)(?:(?:(?:0[13578]|1[02])(-)31)|((0[1,3-9]|1[0-2])(-)(29|30))))$|^(?:(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(-)02(-)29)$|^(?:(?:1[6-9]|2[0-9])\\d{2})(-)(?:(?:0[1-9])|(?:1[0-2]))(-)(?:0[1-9]|1\\d|2[0-8])$";
+    String DATE_FORMAT_REGEX = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))";
 
     String ERROR_FILE_IO = "Error file io: [File not exist!]";
 
@@ -49,11 +49,15 @@ public interface Constants {
 
     String ERROR_AUTHORIZATION_USER_IS_NOT_FOUND = "Error authorization: [User is not found!]";
 
+    String ERROR_AUTHORIZATION_USER_ENTERED_INVALID_DATA = "Error authorization: [User entered invalid data!]";
+
     String ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED = "Error authorization: [You are not authorized!]";
 
     String ERROR_AUTHORIZATION_USER_IS_ALREADY_AUTHORIZED = "Error authorization: [User is already authorized!]";
 
     String SUCCESSFUL_REGISTRATION = "Successful registration!";
+
+    String ERROR_REGISTRATION_USER_HAS_NOT_BEEN_CREATED = "User has not been created";
 
     String ERROR_REGISTRATION_INVALID_INPUT_DATA = "Error registration: [Invalid input data!]";
 

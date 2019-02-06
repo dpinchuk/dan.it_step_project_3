@@ -8,6 +8,7 @@ import utils.Loader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -52,6 +53,29 @@ public class BookingDAOImpl implements BookingDAO {
     @Override
     public boolean deleteBookingById(int id) {
         return this.bookingList.removeIf(b -> b.getId() == id);
+    }
+
+    /**
+     * Deletes booking
+     * Returns flight [id]
+     *
+     * @param booking BookingModel
+     * @return boolean
+     */
+    @Override
+    public int deleteBooking(BookingModel booking) {
+        int id = 0;
+        BookingModel boooking = this.bookingList
+                .stream()
+                .filter(e -> e.equals(booking))
+                .findFirst()
+                .orElse(null);
+        if (boooking != null) {
+            id = boooking.getFlight().getId();
+            this.bookingList.remove(boooking);
+        }
+        //.removeIf(b -> b.equals(booking));
+        return id;
     }
 
     /**

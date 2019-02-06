@@ -20,6 +20,8 @@ public class BookingModel implements Serializable {
         this.user = user;
     }
 
+    public BookingModel() {};
+
     public int getId() {
         return id;
     }

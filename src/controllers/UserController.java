@@ -46,15 +46,16 @@ public class UserController {
     }
 
     /**
-     * Creayes user by data
+     * Creates new user
      *
      * @param login       String
      * @param password    String
      * @param userName    String
      * @param userSurname String
+     * @return boolean
      */
-    public void createUser(String login, String password, String userName, String userSurname) {
-        this.userService.createUser(login, password, userName, userSurname);
+    public boolean createUser(String login, String password, String userName, String userSurname) {
+        return this.userService.createUser(login, password, userName, userSurname);
     }
 
     /**

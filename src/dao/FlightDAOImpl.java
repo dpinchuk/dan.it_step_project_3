@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static utils.Constants.*;
 
@@ -76,10 +78,14 @@ public class FlightDAOImpl implements FlightDAO {
                 .findFirst()
                 .orElse(null);
         if (flightModel != null) {
-            this.flightList.remove(flightModel);
+            int index = IntStream.range(0, this.flightList.size())
+                    .filter(i -> this.flightList.get(i).equals(flightModel))
+                    .findFirst()
+                    .getAsInt();
+            this.flightList.remove(index);
             int seatsRemaining = flightModel.getSeatsRemaining() + place;
             flightModel.setSeatsRemaining(seatsRemaining);
-            this.flightList.add(flightModel);
+            this.flightList.add(index, flightModel);
         } else {
             System.out.println(OPERATION_ERROR);
         }

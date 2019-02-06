@@ -6,7 +6,6 @@ import controllers.UserController;
 import models.BookingModel;
 import models.FlightModel;
 import models.UserModel;
-import utils.Exceptions;
 import utils.Logger;
 
 import java.util.Arrays;
@@ -80,7 +79,7 @@ public class ViewConsole {
                 actionSearchFlightAndCreateBooking();
                 break;
             case "4":
-                actionDeleteFlightBooking();
+                actionCancelBooking();
                 break;
             case "5":
                 actionGetUserBookings();
@@ -89,15 +88,15 @@ public class ViewConsole {
                 actionUserLogInOut();
                 break;
             case "7":
-                actionRegistration();
+                if (this.sessionId == 0) {
+                    actionRegistration();
+                } else {
+                    System.out.println("Unknown action!");
+                }
                 break;
             default:
+                System.out.println("Unknown action!");
                 this.logger.error("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] selected unknown action");
-                try {
-                    throw new Exceptions("Unknown action!");
-                } catch (Exceptions exceptions) {
-                    System.out.println(exceptions.getMessage());
-                }
         }
         System.out.println("\n\n\n");
     }
@@ -117,129 +116,88 @@ public class ViewConsole {
      */
     private void actionViewFlightInfo() {
         System.out.println("\n\n[View flight information]");
-        int id = inputIntData("Flight [id] must be between [1] and [" + this.flightController.getFlightListSize() + "]!", "Flight [id]");
-        if (id > 0) {
-            printObjectAsString(this.flightController.getFlightInfo(id));
-            this.logger.info("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] has viewed information about exist flight [#" + id + "]");
-        } else {
-            try {
-                throw new Exceptions(SEARCH_FALSE);
-            } catch (Exceptions exceptions) {
-                System.out.println(exceptions.getMessage());
-            }
-            this.logger.info("[" + this.user.getUserName() + " " + this.user.getUserSurname() + "] has viewed information about unknown flight [#" + id + "]");
-        }
+        String id = inputStringData("", "");
+        String flightInfo = this.flightController.getFlightInfo(id, this.user);
+        printString(flightInfo);
     }
+
 
     private void actionSearchFlightAndCreateBooking() {
         if (this.sessionId != 0) {
             System.out.println("\n\n[Flight search and booking]");
             String destination = inputStringData("[1. Destination must be consist of letters and case does not matter [Kiev, berlin, MADRID]!]", "destination");
-            if (!destination.equals("")) {
-                String date = inputStringData("[2. Date must be in a format [YYYY-MM-DD]!]", "date");
-                if (!date.equals("") && isDateValid(date)) {
-                    int ticketsNumber = inputIntData("[3. Number of tickets must be an integer!]", "number of tickets");
-                    if (ticketsNumber > 0) {
-                        List<FlightModel> listFlights = this.flightController.getFlightByData(destination, date, ticketsNumber);
-                        if (listFlights.size() > 0) {
-                            printFlightList(listFlights);
-                            FlightModel flight = selectFlight(listFlights, ticketsNumber);
-                            if (flight != null) {
-                                for (int i = 0; i < ticketsNumber; i++) {
-                                    BookingModel booking = this.bookingController.createBooking(flight, this.userController.getUserBySessionId(this.sessionId));
-                                    this.flightController.updateFlight(flight, -1);
-                                    System.out.println("Created booking:\n" + booking);
-                                    this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] created booking [id=" + booking.getId() + "]");
-                                }
-                            }
-                        } else {
-                            try {
-                                throw new Exceptions(SEARCH_FALSE);
-                            } catch (Exceptions exceptions) {
-                                System.out.println(exceptions.getMessage());
-                            }
-                        }
-                    } else {
-                        try {
-                            throw new Exceptions(INVALID_DATA);
-                        } catch (Exceptions exceptions) {
-                            System.out.println(exceptions.getMessage());
-                        }
-                    }
+            String date = inputStringData("[2. Date must be in a format [YYYY-MM-DD]!]", "date");
+            while (!isDateValid(date)) {
+                System.out.println(INVALID_DATA + " Repeat to enter date:");
+                date = inputStringData("[2. Date must be in a format [YYYY-MM-DD]!]", "date");
+            }
+            String ticketsNumber = inputStringData("[3. Number of tickets must be an integer!]", "number of tickets");
+            try {
+                int tickets = Integer.parseInt(ticketsNumber);
+                List<FlightModel> flightList = this.flightController.getFlightByData(destination, date, tickets, this.user);
+                if (flightList.size() > 0) {
+                    printFlightList(flightList);
+                    createBooking(flightList, tickets);
                 } else {
-                    try {
-                        throw new Exceptions(INVALID_DATA);
-                    } catch (Exceptions exceptions) {
-                        System.out.println(exceptions.getMessage());
+                    System.out.println(SEARCH_FALSE + " Please, change search parameters [destination, date, number of tickets]");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println(INVALID_DATA);
+                this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] entered invalid number of tickets");
+            }
+        } else {
+            System.out.println(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
+        }
+    }
+
+    /**
+     * Create new booking
+     * @param flightList List<FlightModel>
+     * @param tickets int
+     */
+    private void createBooking(List<FlightModel> flightList, int tickets) {
+        int[] idArr = flightList.stream().mapToInt(FlightModel::getId).toArray();
+        String flightId = inputStringData("\n[4. Flight [id] must be in " + Arrays.toString(idArr) + "!]", "a flight and input [id]");
+        int id = 0;
+        try {
+            id = Integer.parseInt(flightId);
+            if (isInputNumberIsInArrayOfFlightId(id, idArr) && this.flightController.isFlightExist(this.flightController.getFlightById(id))) {
+                FlightModel flight = this.flightController.getFlightById(id);
+                for (int i = 0; i < tickets; i++) {
+                    BookingModel booking = this.bookingController.createBooking(flight, this.user);
+                    if (booking != null) {
+                        this.flightController.updateFlight(flight, -1);
+                        System.out.println("Created booking:\n" + booking);
+                        this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] created booking [id=" + booking.getId() + "]");
+                    } else {
+                        System.out.println(OPERATION_ERROR);
+                        this.logger.error("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] didn't create booking");
                     }
                 }
             } else {
-                try {
-                    throw new Exceptions(INVALID_DATA);
-                } catch (Exceptions exceptions) {
-                    System.out.println(exceptions.getMessage());
-                }
+                System.out.println(OPERATION_ERROR);
+                this.logger.error("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] didn't create booking");
             }
-        } else {
-            try {
-                throw new Exceptions(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
-            } catch (Exceptions exceptions) {
-                System.out.println(exceptions.getMessage());
-            }
+        } catch (NumberFormatException e) {
+            System.out.println(INVALID_DATA);
         }
     }
 
     /**
      * Cancel booking by [id]
      */
-    private void actionDeleteFlightBooking() {
-        if (this.sessionId != 0) {
-            System.out.println("[0] - EXIT");
-            List<BookingModel> listBookings = this.bookingController.getUserBookings(this.user);
-            if (listBookings.size() > 0) {
-                int[] idArr = this.bookingController.getUserBookings(this.user).stream().mapToInt(BookingModel::getId).toArray();
-                int deleteBookingId = inputIntData("Booking [id] must be in " + Arrays.toString(idArr) + "!", "[id] your flight booking");
-                if (deleteBookingId > 0) {
-                    if (this.bookingController.isBookingExist(deleteBookingId)) {
-                        FlightModel updateFlight = this.bookingController.getBookingById(deleteBookingId).getFlight();
-                        boolean isBookingDelete = this.bookingController.deleteBookingById(deleteBookingId);
-                        if (isBookingDelete) {
-                            this.flightController.updateFlight(updateFlight, 1);
-                            System.out.println(OPERATION_SUCCESS);
-                            this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] deleted booking [id=" + deleteBookingId + "]");
-                        } else {
-                            try {
-                                throw new Exceptions(OPERATION_ERROR);
-                            } catch (Exceptions exceptions) {
-                                System.out.println(exceptions.getMessage());
-                            }
-                        }
-                    } else {
-                        try {
-                            throw new Exceptions(INVALID_DATA);
-                        } catch (Exceptions exceptions) {
-                            System.out.println(exceptions.getMessage());
-                        }
-                    }
-                } else {
-                    try {
-                        throw new Exceptions(BREAK_ACTION);
-                    } catch (Exceptions exceptions) {
-                        System.out.println(exceptions.getMessage());
-                    }
-                }
-            } else {
-                try {
-                    throw new Exceptions(SEARCH_FALSE);
-                } catch (Exceptions exceptions) {
-                    System.out.println(exceptions.getMessage());
-                }
-            }
-        } else {
-            try {
-                throw new Exceptions(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
-            } catch (Exceptions exceptions) {
-                System.out.println(exceptions.getMessage());
+    private void actionCancelBooking() {
+        System.out.println("[0] - EXIT");
+        List<BookingModel> bookingList = this.bookingController.getUserBookings(this.user, this.sessionId);
+        if (bookingList.size() > 0) {
+            int[] idArr = bookingList.stream().mapToInt(BookingModel::getId).toArray();
+            String bookingDel = inputStringData("Booking [id] must be in " + Arrays.toString(idArr) + "!", "[id] your flight booking");
+            int flightId = this.bookingController.deleteBookingById(bookingDel, this.user);
+            if (flightId != 0) {
+                FlightModel updateFlight = this.flightController.getFlightById(flightId);
+                this.flightController.updateFlight(updateFlight, 1);
+                System.out.println(OPERATION_SUCCESS);
+                this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] deleted booking [id=" + bookingDel + "]");
             }
         }
     }
@@ -248,24 +206,10 @@ public class ViewConsole {
      * Returns users's bookings (only for authorized users!)
      */
     private void actionGetUserBookings() {
-        if (this.sessionId != 0) {
-            List<BookingModel> userBookings = this.bookingController.getUserBookings(this.user);
-            if (userBookings.size() > 0) {
-                printBookingList(userBookings);
-                this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] got bookings");
-            } else {
-                try {
-                    throw new Exceptions(SEARCH_FALSE);
-                } catch (Exceptions exceptions) {
-                    System.out.println(exceptions.getMessage());
-                }
-            }
-        } else {
-            try {
-                throw new Exceptions(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
-            } catch (Exceptions exceptions) {
-                System.out.println(exceptions.getMessage());
-            }
+        List<BookingModel> userBookings = this.bookingController.getUserBookings(this.user, this.sessionId);
+        if (userBookings.size() > 0) {
+            printBookingList(userBookings);
+            this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] viewed bookings");
         }
     }
 
@@ -276,37 +220,14 @@ public class ViewConsole {
         if (this.sessionId == 0) {
             System.out.println("\n[Log in user]");
             String login = inputStringData("", "login");
-            if (!login.equals("")) {
-                String password = inputStringData("", "password");
-                if (!password.equals("")) {
-                    UserModel user = this.userController.getUserByLoginAndPassword(login, password);
-                    if (user != null) {
-                        this.sessionId = user.hashCode();
-                        this.user = user;
-                        System.out.println(SUCCESSFUL_AUTHORIZATION);
-                        System.out.println("Welcone, [" + user.getUserName() + " " + user.getUserSurname() + "] !");
-                        this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + " has logged in");
-                    } else {
-                        try {
-                            throw new Exceptions(ERROR_AUTHORIZATION_USER_IS_NOT_FOUND);
-                        } catch (Exceptions exceptions) {
-                            System.out.println(exceptions.getMessage());
-                        }
-                        this.logger.info("Unknown user [" + this.user.getUserName() + " " + this.user.getUserSurname() + " tried to log in with fake login data");
-                    }
-                } else {
-                    try {
-                        throw new Exceptions(INVALID_DATA);
-                    } catch (Exceptions exceptions) {
-                        System.out.println(exceptions.getMessage());
-                    }
-                }
-            } else {
-                try {
-                    throw new Exceptions(INVALID_DATA);
-                } catch (Exceptions exceptions) {
-                    System.out.println(exceptions.getMessage());
-                }
+            String password = inputStringData("", "password");
+            UserModel user = this.userController.getUserByLoginAndPassword(login, password);
+            if (user != null) {
+                this.sessionId = user.hashCode();
+                this.user = user;
+                System.out.println(SUCCESSFUL_AUTHORIZATION);
+                System.out.println("Welcone, [" + user.getUserName() + " " + user.getUserSurname() + "] !");
+                this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + " has logged in");
             }
         } else {
             System.out.println("[Log out user]");
@@ -323,40 +244,23 @@ public class ViewConsole {
         if (this.sessionId == 0) {
             System.out.println("\n[User registration]");
             String login = inputStringData("", "login");
-            UserModel user = this.userController.getUserByLogin(login);
-            if (!login.equals("") && user == null) {
-                String password = inputStringData("", "password");
-                if (!password.equals("")) {
-                    String confirmPassword = inputStringData("", "confirm password");
-                    if (password.equals(confirmPassword)) {
-                        String userName = inputStringData("", "user name");
-                        String userSurname = inputStringData("", "user surname");
-                        if (!userName.equals("") && !userSurname.equals("")) {
-                            this.userController.createUser(login, password, userName, userSurname);
-                            System.out.println(SUCCESSFUL_REGISTRATION + " - [" + userName + " " + userSurname + "]");
-                            this.logger.info("User [" + userName + " " + userSurname + " creates account [" + login + ", " + password + "]");
-                        }
-                    } else {
-                        try {
-                            throw new Exceptions(ERROR_REGISTRATION_INVALID_INPUT_DATA);
-                        } catch (Exceptions exceptions) {
-                            System.out.println(exceptions.getMessage());
-                        }
-                    }
+            String password = inputStringData("", "password");
+            String confirmPassword = inputStringData("", "confirm password");
+            if (!login.equals("") && !password.equals("") && password.equals(confirmPassword)) {
+                String userName = inputStringData("", "user name");
+                String userSurname = inputStringData("", "user surname");
+                boolean isUserCreated = this.userController.createUser(login, password, userName, userSurname);
+                if (isUserCreated) {
+                    System.out.println(OPERATION_SUCCESS);
+                    this.logger.info("Created new user [login: " + login + ", password: " + password + ", username: " + userName + ", userSurname: " + userSurname + "]");
+                } else {
+                    System.out.println(OPERATION_ERROR);
                 }
             } else {
-                try {
-                    throw new Exceptions(ERROR_REGISTRATION_USER_IS_ALREADY_REGISTERED);
-                } catch (Exceptions exceptions) {
-                    System.out.println(exceptions.getMessage());
-                }
+                System.out.println(ERROR_REGISTRATION_INVALID_INPUT_DATA);
             }
         } else {
-            try {
-                throw new Exceptions(ERROR_AUTHORIZATION_USER_IS_ALREADY_AUTHORIZED);
-            } catch (Exceptions exceptions) {
-                System.out.println(exceptions.getMessage());
-            }
+            System.out.println(ERROR_AUTHORIZATION_USER_IS_ALREADY_AUTHORIZED);
         }
     }
 
@@ -400,13 +304,11 @@ public class ViewConsole {
     /**
      * Prints specific flight
      *
-     * @param object String
+     * @param string String
      */
-    private void printObjectAsString(String object) {
-        if (object != null) {
-            System.out.println(object);
-        } else {
-            System.out.println("\n\n" + SEARCH_FALSE);
+    private void printString(String string) {
+        if (!string.equals("")) {
+            System.out.println(string);
         }
     }
 
@@ -424,10 +326,6 @@ public class ViewConsole {
             }
         }
         return false;
-    }
-
-    private boolean isDateValid(String date) {
-        return Pattern.compile(DATE_FORMAT_REGEX).matcher(date).matches();
     }
 
     /**
@@ -452,38 +350,13 @@ public class ViewConsole {
     }
 
     /**
-     * Returns input number
+     * Checks for valid date
      *
-     * @param actionName String
-     * @param text       String
-     * @return int
+     * @param date String
+     * @return boolean
      */
-    private int inputIntData(String actionName, String text) {
-        if (!actionName.equals("")) {
-            System.out.println("\n" + actionName);
-        }
-        System.out.print("Input " + text + ": ");
-        int num = this.scanner.nextInt();
-        if (num > 0 && num <= 100) {
-            return num;
-        }
-        return 0;
-    }
-
-    /**
-     * Returns flight by [id]
-     *
-     * @param listFlights   List<FlightModel>
-     * @param ticketsNumber int
-     * @return FlightModel
-     */
-    private FlightModel selectFlight(List<FlightModel> listFlights, int ticketsNumber) {
-        int[] idArr = listFlights.stream().mapToInt(FlightModel::getId).toArray();
-        int flightId = inputIntData("\n[4. Flight [id] must be in " + Arrays.toString(idArr) + "!]", "a flight and input [id]");
-        if (isInputNumberIsInArrayOfFlightId(flightId, idArr) && this.flightController.isFlightExist(this.flightController.getFlightById(flightId))) {
-            return this.flightController.getFlightById(flightId);
-        }
-        return null;
+    private boolean isDateValid(String date) {
+        return Pattern.compile(DATE_FORMAT_REGEX).matcher(date).matches();
     }
 
 }

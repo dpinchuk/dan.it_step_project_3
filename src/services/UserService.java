@@ -20,9 +20,9 @@ public interface UserService {
      * @param password    String
      * @param userName    String
      * @param userSurname String
-     * @return UserModel
+     * @return boolean
      */
-    UserModel createUser(String login, String password, String userName, String userSurname);
+    boolean createUser(String login, String password, String userName, String userSurname);
 
     /**
      * @param login    String

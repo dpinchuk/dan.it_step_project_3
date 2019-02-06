@@ -27,6 +27,12 @@ public interface BookingDAO {
     boolean deleteBookingById(int id); //удаляет бронированный рейс по id
 
     /**
+     * @param booking BookingModel
+     * @return int
+     */
+    int deleteBooking(BookingModel booking); //удаляет бронированный рейс
+
+    /**
      * @param id int
      * @return object BookingModel
      */

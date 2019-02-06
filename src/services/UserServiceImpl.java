@@ -3,12 +3,14 @@ package services;
 import dao.UserDAOImpl;
 import models.UserModel;
 
+import static utils.Constants.*;
+
 /**
  * Service class extends MainService implements UserService
  *
  * @author Pinchuk Dmitry
  */
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends MainService implements UserService {
 
     private UserDAOImpl userDAO = new UserDAOImpl();
 
@@ -30,11 +32,28 @@ public class UserServiceImpl implements UserService {
      * @param password    String
      * @param userName    String
      * @param userSurname String
-     * @return UserModel
+     * @return boolean
      */
     @Override
-    public UserModel createUser(String login, String password, String userName, String userSurname) {
-        return this.userDAO.createUser(login, password, userName, userSurname);
+    public boolean createUser(String login, String password, String userName, String userSurname) {
+        if (!login.equals("") && !password.equals("") && !userName.equals("") && !userSurname.equals("")) {
+            if (this.userDAO.getUserByLogin(login) != null) {
+                getException(ERROR_REGISTRATION_USER_IS_ALREADY_REGISTERED, ERROR_REGISTRATION_USER_IS_ALREADY_REGISTERED +
+                        "[login: " + login + "]");
+                return false;
+            }
+            UserModel newUser =  this.userDAO.createUser(login, password, userName, userSurname);
+            if (newUser != null) {
+                return true;
+            } else {
+                getException(ERROR_REGISTRATION_USER_HAS_NOT_BEEN_CREATED, ERROR_REGISTRATION_USER_HAS_NOT_BEEN_CREATED +
+                        "[login: " + login + ", password: " + password + ", username: " + userName + ", userSurname: " + userSurname + "]");
+                return false;
+            }
+        }
+        getException(ERROR_AUTHORIZATION_USER_ENTERED_INVALID_DATA, ERROR_AUTHORIZATION_USER_ENTERED_INVALID_DATA +
+                "[login: " + login + ", password: " + password + ", username: " + userName + ", userSurname: " + userSurname + "]");
+        return false;
     }
 
     /**
@@ -46,7 +65,17 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserModel getUserByLoginAndPassword(String login, String password) {
-        return this.userDAO.getUserByLoginAndPassword(login, password);
+        if (!login.equals("") && !password.equals("")) {
+            UserModel user = this.userDAO.getUserByLoginAndPassword(login, password);
+            if (user == null) {
+                getException(ERROR_AUTHORIZATION_USER_IS_NOT_FOUND, ERROR_AUTHORIZATION_USER_IS_NOT_FOUND);
+                return null;
+            } else {
+                return user;
+            }
+        }
+        getException(ERROR_AUTHORIZATION_USER_ENTERED_INVALID_DATA, ERROR_AUTHORIZATION_USER_ENTERED_INVALID_DATA);
+        return null;
     }
 
     /**
