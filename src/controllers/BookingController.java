@@ -22,8 +22,8 @@ public class BookingController {
      * @param user UserModel
      * @return List<BookingModel>
      */
-    public List<BookingModel> getUserBookings(UserModel user, int sessionId) {
-        return this.bookingService.getUserBookings(user, sessionId);
+    public List<BookingModel> getUserBookings(UserModel user) {
+        return this.bookingService.getUserBookings(user);
     }
 
     /**

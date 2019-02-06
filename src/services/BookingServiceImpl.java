@@ -51,16 +51,11 @@ public class BookingServiceImpl extends MainService implements BookingService {
     /**
      * Returns all user bookings [user must be authorized]
      *
-     * @param user      UserModel
-     * @param sessionId int
+     * @param user UserModel
      * @return List<BookingModel>
      */
     @Override
-    public List<BookingModel> getUserBookings(UserModel user, int sessionId) {
-        if (sessionId == 0) {
-            getException(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED, "User [" + user.getUserName() + " " + user.getUserSurname() + "] selected [actionDeleteFlightBooking]");
-            return new ArrayList<>();
-        }
+    public List<BookingModel> getUserBookings(UserModel user) {
         List<BookingModel> bookingList = this.bookingDAO.getUserBookings(user);
         if (bookingList.size() != 0) {
             return this.bookingDAO.getUserBookings(user);

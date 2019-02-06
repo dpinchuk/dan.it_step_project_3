@@ -16,10 +16,9 @@ public interface BookingService {
 
     /**
      * @param user      UserModel
-     * @param sessionId int
      * @return List<BookingModel>
      */
-    List<BookingModel> getUserBookings(UserModel user, int sessionId);
+    List<BookingModel> getUserBookings(UserModel user);
 
     /**
      * @param id   int

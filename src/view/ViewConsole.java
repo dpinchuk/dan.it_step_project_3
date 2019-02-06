@@ -196,17 +196,19 @@ public class ViewConsole {
      * Cancel booking by [id]
      */
     private void actionCancelBooking() {
-        System.out.println("[0] - EXIT");
-        List<BookingModel> bookingList = this.bookingController.getUserBookings(this.user, this.sessionId);
-        if (bookingList.size() > 0) {
-            int[] idArr = bookingList.stream().mapToInt(BookingModel::getId).toArray();
-            String bookingDel = inputStringData("Booking [id] must be in " + Arrays.toString(idArr) + "!", "[id] your flight booking");
-            int flightId = this.bookingController.deleteBookingById(bookingDel, this.user);
-            if (flightId != 0) {
-                FlightModel updateFlight = this.flightController.getFlightById(flightId);
-                this.flightController.updateFlight(updateFlight, 1);
-                System.out.println(OPERATION_SUCCESS);
-                this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] deleted booking [id=" + bookingDel + "]");
+        if (this.sessionId != 0) {
+            System.out.println("[0] - EXIT");
+            List<BookingModel> bookingList = this.bookingController.getUserBookings(this.user);
+            if (bookingList.size() > 0) {
+                int[] idArr = bookingList.stream().mapToInt(BookingModel::getId).toArray();
+                String bookingDel = inputStringData("Booking [id] must be in " + Arrays.toString(idArr) + "!", "[id] your flight booking");
+                int flightId = this.bookingController.deleteBookingById(bookingDel, this.user);
+                if (flightId != 0) {
+                    FlightModel updateFlight = this.flightController.getFlightById(flightId);
+                    this.flightController.updateFlight(updateFlight, 1);
+                    System.out.println(OPERATION_SUCCESS);
+                    this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] deleted booking [id=" + bookingDel + "]");
+                }
             }
         } else {
             System.out.println(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
@@ -217,10 +219,14 @@ public class ViewConsole {
      * Returns users's bookings (only for authorized users!)
      */
     private void actionGetUserBookings() {
-        List<BookingModel> userBookings = this.bookingController.getUserBookings(this.user, this.sessionId);
-        if (userBookings.size() > 0) {
-            printBookingList(userBookings);
-            this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] viewed bookings");
+        if (this.sessionId != 0) {
+            List<BookingModel> userBookings = this.bookingController.getUserBookings(this.user);
+            if (userBookings.size() > 0) {
+                printBookingList(userBookings);
+                this.logger.info("User [" + this.user.getUserName() + " " + this.user.getUserSurname() + "] viewed bookings");
+            }
+        } else {
+            System.out.println(ERROR_AUTHORIZATION_YOU_ARE_NOT_AUTHORIZED);
         }
     }
 
