@@ -27,17 +27,6 @@ public class MainService {
     }
 
     /**
-     * Checks for valid string
-     *
-     * @param str String
-     * @return boolean
-     */
-    public boolean isValidString(String str) {
-        //TODO XSS-inj, SQL-inj, CSRF-inj
-        return str != null && !str.equals("") && str.length() < 32;
-    }
-
-    /**
      * Generate new exceptions
      *
      * @param message String

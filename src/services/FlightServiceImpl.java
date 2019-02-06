@@ -3,7 +3,6 @@ package services;
 import dao.FlightDAOImpl;
 import models.FlightModel;
 import models.UserModel;
-import utils.Logger;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -262,7 +262,7 @@ public class ViewConsole {
                 String userSurname = inputStringData("", "user surname");
                 boolean isUserCreated = this.userController.createUser(login, password, userName, userSurname);
                 if (isUserCreated) {
-                    System.out.println(OPERATION_SUCCESS);
+                    System.out.println(SUCCESSFUL_REGISTRATION);
                     this.logger.info("Created new user [login: " + login + ", password: " + password + ", username: " + userName + ", userSurname: " + userSurname + "]");
                 } else {
                     System.out.println(OPERATION_ERROR);
